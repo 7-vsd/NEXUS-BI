@@ -1,0 +1,4 @@
+cluster,customers,recency_mean,recency_median,frequency_mean,monetary_mean,monetary_median,revenue,cluster_name,revenue_share_pct,customer_share_pct,recommended_strategy
+0,24029,66.04968995796746,65.0,1.0,170.33264763410878,111.17,4092923.19,Recent One-Time Buyers,26.01,25.3,"Drive the 2nd order: post-delivery cross-sell within 30-60 days, review request, free-shipping threshold."
+1,68067,307.9884672455081,284.0,1.0,157.96771754300912,103.86,10752388.63,Lapsed One-Time Buyers,68.33,71.66,Low-cost automated win-back (email/push) on the category bought; exclude from paid retargeting.
+2,2887,227.445791479044,207.0,2.1139591271215794,308.3530342916522,225.55,890215.21,Loyal Repeat Buyers,5.66,3.04,"Protect: VIP perks, early access, referral programme; monitor for lapses."

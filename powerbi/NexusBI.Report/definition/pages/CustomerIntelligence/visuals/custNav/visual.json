@@ -1,0 +1,31 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.4.0/schema.json",
+  "name": "custNav",
+  "position": {
+    "x": 18,
+    "y": 60,
+    "z": 0,
+    "width": 1244,
+    "height": 36,
+    "tabOrder": 12000
+  },
+  "visual": {
+    "visualType": "pageNavigator",
+    "drillFilterOtherVisuals": true,
+    "visualContainerObjects": {
+      "general": [
+        {
+          "properties": {
+            "altText": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Page navigation: buttons to move between the report pages.'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

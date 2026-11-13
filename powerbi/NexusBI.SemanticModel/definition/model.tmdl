@@ -1,0 +1,44 @@
+model Model
+	culture: en-US
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	discourageImplicitMeasures
+	sourceQueryCulture: en-US
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
+
+annotation PBI_QueryOrder = ["DataFolder", "RangeStart", "RangeEnd", "DimDate", "DimCustomer", "DimProduct", "DimSeller", "DimLocation", "DimPaymentType", "FactOrders", "FactOrderItems", "FactPayments", "FactReviews", "CustomerSegments", "ChurnScores", "RevenueForecast", "DemandForecast", "Anomalies", "SynInventoryWeekly", "SynCategoryMargin", "SecurityUserRegion"]
+
+annotation __PBI_TimeIntelligenceEnabled = 0
+
+annotation PBI_ProTooling = ["DevMode"]
+
+ref table DimDate
+ref table DimCustomer
+ref table DimProduct
+ref table DimSeller
+ref table DimLocation
+ref table DimPaymentType
+ref table FactOrders
+ref table FactOrderItems
+ref table FactPayments
+ref table FactReviews
+ref table CustomerSegments
+ref table ChurnScores
+ref table RevenueForecast
+ref table DemandForecast
+ref table Anomalies
+ref table SynInventoryWeekly
+ref table SynCategoryMargin
+ref table SecurityUserRegion
+ref table _Measures
+ref table 'KPI Selector'
+ref table 'Metric Selector'
+
+ref role 'Regional Manager (Dynamic)'
+ref role 'Region Sudeste'
+ref role 'Region Sul'
+ref role 'Region Nordeste'
+ref role 'Region Centro-Oeste'
+ref role 'Region Norte'
+ref role 'Executive (All Data)'

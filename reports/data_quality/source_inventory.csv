@@ -1,0 +1,10 @@
+dataset,file,size_mb,md5,rows,columns,memory_mb,cast_failures,extra_columns
+customers,olist_customers_dataset.csv,9.03,8a2c4244856aab4bde3b8ed81f8ca251,99441,5,36.43,0,
+orders,olist_orders_dataset.csv,17.65,8bd60e55c1ca229d9f70b62f3e72f22c,99441,8,28.24,0,
+order_items,olist_order_items_dataset.csv,15.44,f4fa76976662e9cba0633f9e49ed2645,112650,7,33.8,0,
+payments,olist_order_payments_dataset.csv,5.78,75ce0c041d18e5f250c5cea9a8042944,103886,5,18.89,0,
+reviews,olist_order_reviews_dataset.csv,14.45,914066be00d2db0c3d857f071cff1688,99224,7,37.11,0,
+products,olist_products_dataset.csv,2.38,e935401104a3669223b83c9a01fdf5ca,32951,9,7.14,0,
+sellers,olist_sellers_dataset.csv,0.17,5b22c02facdf842d6c0aea36e1849018,3095,4,0.86,0,
+geolocation,olist_geolocation_dataset.csv,61.27,6d8464e41c8e2013955e437b6b4fafbd,1000163,5,207.19,0,
+category_translation,product_category_name_translation.csv,0.0,4196d142e8f2b9697521fc50c97f626b,71,2,0.01,0,

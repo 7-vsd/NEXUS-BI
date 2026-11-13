@@ -1,0 +1,231 @@
+{
+  "best_model": "random_forest",
+  "selection_metric": "validation ROC-AUC",
+  "cutoffs": {
+    "train": "2017-05-15",
+    "validation": "2017-08-15",
+    "test": "2018-02-15"
+  },
+  "horizon_days": 180,
+  "lookback_days": 365,
+  "population": {
+    "train": {
+      "customers": 9145,
+      "churn_rate": 0.9852378348824494
+    },
+    "validation": {
+      "customers": 19941,
+      "churn_rate": 0.9837019206659646
+    },
+    "test": {
+      "customers": 51262,
+      "churn_rate": 0.9880613319808045
+    }
+  },
+  "results": {
+    "logistic_regression": {
+      "validation": {
+        "threshold": 0.35999999999999993,
+        "precision": 0.9839113335716839,
+        "recall": 0.9820554649265906,
+        "f1": 0.9829825232810308,
+        "roc_auc": 0.5384500878403815,
+        "pr_auc_churn": 0.9836995058910099,
+        "pr_auc_return_class": 0.018757984373045645,
+        "return_base_rate": 0.016298079334035404,
+        "return_lift_top_decile": 1.2609693464430307,
+        "confusion_matrix": {
+          "tn": 10,
+          "fp": 315,
+          "fn": 352,
+          "tp": 19264
+        },
+        "n": 19941,
+        "churn_rate": 0.9837019206659646
+      },
+      "test": {
+        "threshold": 0.35999999999999993,
+        "precision": 0.9888027048528242,
+        "recall": 0.9815794669299112,
+        "f1": 0.9851778460319033,
+        "roc_auc": 0.5804997128828497,
+        "pr_auc_churn": 0.9907701016032592,
+        "pr_auc_return_class": 0.024323211581689798,
+        "return_base_rate": 0.011938668019195506,
+        "return_lift_top_decile": 2.009490318460132,
+        "confusion_matrix": {
+          "tn": 49,
+          "fp": 563,
+          "fn": 933,
+          "tp": 49717
+        },
+        "n": 51262,
+        "churn_rate": 0.9880613319808045
+      }
+    },
+    "random_forest": {
+      "validation": {
+        "threshold": 0.5599999999999999,
+        "precision": 0.9839566779695329,
+        "recall": 0.9911296900489397,
+        "f1": 0.9875301587301587,
+        "roc_auc": 0.5891011262391768,
+        "pr_auc_churn": 0.987999468631805,
+        "pr_auc_return_class": 0.022518471006735805,
+        "return_base_rate": 0.016298079334035404,
+        "return_lift_top_decile": 1.6915442452284557,
+        "confusion_matrix": {
+          "tn": 8,
+          "fp": 317,
+          "fn": 174,
+          "tp": 19442
+        },
+        "n": 19941,
+        "churn_rate": 0.9837019206659646
+      },
+      "test": {
+        "threshold": 0.5599999999999999,
+        "precision": 0.9885860104446906,
+        "recall": 0.9866732477788747,
+        "f1": 0.9876287029900594,
+        "roc_auc": 0.5824201717541244,
+        "pr_auc_churn": 0.9904934637759331,
+        "pr_auc_return_class": 0.02201831378050535,
+        "return_base_rate": 0.011938668019195506,
+        "return_lift_top_decile": 1.846117121837357,
+        "confusion_matrix": {
+          "tn": 35,
+          "fp": 577,
+          "fn": 675,
+          "tp": 49975
+        },
+        "n": 51262,
+        "churn_rate": 0.9880613319808045
+      }
+    },
+    "xgboost": {
+      "validation": {
+        "threshold": 0.31999999999999995,
+        "precision": 0.9838112858464385,
+        "recall": 0.975887030995106,
+        "f1": 0.9798331371244305,
+        "roc_auc": 0.5396718534320492,
+        "pr_auc_churn": 0.9858913151904602,
+        "pr_auc_return_class": 0.01831425095764035,
+        "return_base_rate": 0.016298079334035404,
+        "return_lift_top_decile": 1.1687032967032969,
+        "confusion_matrix": {
+          "tn": 10,
+          "fp": 315,
+          "fn": 473,
+          "tp": 19143
+        },
+        "n": 19941,
+        "churn_rate": 0.9837019206659646
+      },
+      "test": {
+        "threshold": 0.31999999999999995,
+        "precision": 0.9885949817919885,
+        "recall": 0.9754787759131294,
+        "f1": 0.9819930834360218,
+        "roc_auc": 0.5742271225699889,
+        "pr_auc_churn": 0.9902320636002978,
+        "pr_auc_return_class": 0.019656290079703986,
+        "return_base_rate": 0.011938668019195506,
+        "return_lift_top_decile": 1.862454441499635,
+        "confusion_matrix": {
+          "tn": 42,
+          "fp": 570,
+          "fn": 1242,
+          "tp": 49408
+        },
+        "n": 51262,
+        "churn_rate": 0.9880613319808045
+      }
+    },
+    "baseline_prior": {
+      "validation": {
+        "threshold": 0.5,
+        "precision": 0.9837019206659646,
+        "recall": 1.0,
+        "f1": 0.9917840078873524,
+        "roc_auc": 0.5,
+        "pr_auc_churn": 0.9837019206659646,
+        "pr_auc_return_class": 0.016298079334035404,
+        "return_base_rate": 0.016298079334035404,
+        "return_lift_top_decile": 1.0,
+        "confusion_matrix": {
+          "tn": 0,
+          "fp": 325,
+          "fn": 0,
+          "tp": 19616
+        },
+        "n": 19941,
+        "churn_rate": 0.9837019206659646
+      },
+      "test": {
+        "threshold": 0.5,
+        "precision": 0.9880613319808045,
+        "recall": 1.0,
+        "f1": 0.9939948190595809,
+        "roc_auc": 0.5,
+        "pr_auc_churn": 0.9880613319808045,
+        "pr_auc_return_class": 0.011938668019195506,
+        "return_base_rate": 0.011938668019195506,
+        "return_lift_top_decile": 1.0,
+        "confusion_matrix": {
+          "tn": 0,
+          "fp": 612,
+          "fn": 0,
+          "tp": 50650
+        },
+        "n": 51262,
+        "churn_rate": 0.9880613319808045
+      }
+    }
+  },
+  "shap_mean_abs_top": [
+    {
+      "feature": "num__recency_days",
+      "mean_abs_shap": 0.5154654383659363
+    },
+    {
+      "feature": "num__days_since_first",
+      "mean_abs_shap": 0.23340116441249847
+    },
+    {
+      "feature": "num__avg_freight_ratio",
+      "mean_abs_shap": 0.22793126106262207
+    },
+    {
+      "feature": "num__avg_order_value",
+      "mean_abs_shap": 0.22342362999916077
+    },
+    {
+      "feature": "num__monetary",
+      "mean_abs_shap": 0.20455558598041534
+    },
+    {
+      "feature": "num__max_installments",
+      "mean_abs_shap": 0.18560850620269775
+    },
+    {
+      "feature": "num__avg_delivery_days",
+      "mean_abs_shap": 0.1791171431541443
+    },
+    {
+      "feature": "num__avg_review",
+      "mean_abs_shap": 0.11125976592302322
+    },
+    {
+      "feature": "num__avg_items",
+      "mean_abs_shap": 0.06643318384885788
+    },
+    {
+      "feature": "num__last_review",
+      "mean_abs_shap": 0.045972321182489395
+    }
+  ],
+  "scored_customers": 73971,
+  "scoring_cutoff": "2018-08-23"
+}

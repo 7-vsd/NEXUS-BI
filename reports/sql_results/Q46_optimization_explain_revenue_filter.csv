@@ -1,0 +1,26 @@
+QUERY PLAN
+HashAggregate  (cost=3225.30..3227.80 rows=200 width=36) (actual time=27.064..27.068 rows=3 loops=1)
+  Group Key: d.month_start
+  Batches: 1  Memory Usage: 40kB
+  Buffers: shared hit=2467
+  ->  Hash Join  (cost=347.20..3125.11 rows=20038 width=10) (actual time=3.017..20.515 rows=20980 loops=1)
+        Hash Cond: (f.purchase_date_key = d.date_key)
+        Buffers: shared hit=2467
+        ->  Bitmap Heap Scan on fact_orders f  (cost=280.09..3005.28 rows=20038 width=10) (actual time=2.155..11.114 rows=20980 loops=1)
+              Recheck Cond: ((purchase_date_key >= 20180101) AND (purchase_date_key <= 20180331))
+              Filter: is_revenue_order
+              Rows Removed by Filter: 228
+              Heap Blocks: exact=2421
+              Buffers: shared hit=2441
+              ->  Bitmap Index Scan on ix_fo_purchase_date  (cost=0.00..275.08 rows=20279 width=0) (actual time=1.671..1.672 rows=21208 loops=1)
+                    Index Cond: ((purchase_date_key >= 20180101) AND (purchase_date_key <= 20180331))
+                    Buffers: shared hit=20
+        ->  Hash  (cost=44.27..44.27 rows=1827 width=8) (actual time=0.845..0.846 rows=1827 loops=1)
+              Buckets: 2048  Batches: 1  Memory Usage: 88kB
+              Buffers: shared hit=26
+              ->  Seq Scan on dim_date d  (cost=0.00..44.27 rows=1827 width=8) (actual time=0.015..0.476 rows=1827 loops=1)
+                    Buffers: shared hit=26
+Planning:
+  Buffers: shared hit=3
+Planning Time: 0.400 ms
+Execution Time: 27.282 ms

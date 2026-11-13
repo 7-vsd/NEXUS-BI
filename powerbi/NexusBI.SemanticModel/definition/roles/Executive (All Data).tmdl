@@ -1,0 +1,3 @@
+/// Full access.
+role 'Executive (All Data)'
+	modelPermission: read

@@ -1,0 +1,7 @@
+delay_bucket,orders,avg_review,pct_1_star
+a) 10+ days early,61523,4.323,6.41
+b) 1-9 days early,26640,4.226,7.00
+c) on estimated day,1280,4.034,8.52
+d) 1-5 days late,2722,2.988,33.61
+e) 6-15 days late,2479,1.741,68.50
+f) 16+ days late,1180,1.726,69.32

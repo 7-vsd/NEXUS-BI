@@ -1,0 +1,16 @@
+category_name_en,revenue,simulated_cogs,simulated_margin_pct,is_synthetic
+health_beauty,1255695.13,620909.90,0.5055,True
+watches_gifts,1198185.21,575529.52,0.5197,True
+bed_bath_table,1035964.06,739384.83,0.2863,True
+sports_leisure,979740.92,679676.92,0.3063,True
+computers_accessories,904322.02,502870.36,0.4439,True
+furniture_decor,727465.05,496795.40,0.3171,True
+housewares,626825.80,406174.64,0.3520,True
+cool_stuff,620770.49,462710.43,0.2546,True
+auto,586585.73,341962.24,0.4170,True
+garden_tools,481009.94,284883.78,0.4077,True
+toys,479808.54,347774.75,0.2752,True
+baby,410312.20,227190.25,0.4463,True
+perfumery,396599.31,266362.51,0.3284,True
+telephony,322342.64,190476.07,0.4091,True
+office_furniture,273580.70,154616.53,0.4348,True

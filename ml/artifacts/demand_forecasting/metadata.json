@@ -1,0 +1,33 @@
+{
+  "module": "demand_forecasting",
+  "trained_at": "2026-11-13T05:33:57.938484+00:00",
+  "python": "3.10.11",
+  "sklearn": "1.7.2",
+  "random_seed": 42,
+  "best_model": "naive",
+  "categories": [
+    "auto",
+    "bed_bath_table",
+    "computers_accessories",
+    "furniture_decor",
+    "garden_tools",
+    "health_beauty",
+    "housewares",
+    "sports_leisure",
+    "telephony",
+    "watches_gifts"
+  ],
+  "features": [
+    "lag_4",
+    "lag_5",
+    "lag_6",
+    "lag_8",
+    "lag_12",
+    "lag_52",
+    "roll4_lag4",
+    "weekofyear",
+    "month",
+    "cat_code",
+    "is_bf_week"
+  ]
+}

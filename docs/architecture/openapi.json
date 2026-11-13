@@ -1,0 +1,1581 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "NEXUS BI API",
+    "description": "Enterprise KPIs and predictive analytics for the Olist e-commerce dataset. All monetary values are in BRL. Forecasts come from models trained by `ml.train_all`.",
+    "version": "1.0.0"
+  },
+  "paths": {
+    "/health": {
+      "get": {
+        "tags": [
+          "System"
+        ],
+        "summary": "Health",
+        "operationId": "health_health_get",
+        "parameters": [
+          {
+            "name": "check_db",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "description": "also probe PostgreSQL",
+              "default": false,
+              "title": "Check Db"
+            },
+            "description": "also probe PostgreSQL"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HealthResponse"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Model or data not available yet",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/business-kpis": {
+      "get": {
+        "tags": [
+          "Business KPIs"
+        ],
+        "summary": "Business Kpis",
+        "operationId": "business_kpis_api_business_kpis_get",
+        "parameters": [
+          {
+            "name": "start_date",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "date"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "inclusive, purchase date",
+              "title": "Start Date"
+            },
+            "description": "inclusive, purchase date"
+          },
+          {
+            "name": "end_date",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "date"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "inclusive, purchase date",
+              "title": "End Date"
+            },
+            "description": "inclusive, purchase date"
+          },
+          {
+            "name": "state",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "minLength": 2,
+                  "maxLength": 2
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "customer state (UF), e.g. SP",
+              "title": "State"
+            },
+            "description": "customer state (UF), e.g. SP"
+          },
+          {
+            "name": "category",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "main order category (English)",
+              "title": "Category"
+            },
+            "description": "main order category (English)"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/KPIResponse"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Model or data not available yet",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/customer-segments": {
+      "get": {
+        "tags": [
+          "Customer Intelligence"
+        ],
+        "summary": "Customer Segments",
+        "operationId": "customer_segments_api_customer_segments_get",
+        "parameters": [
+          {
+            "name": "customer_unique_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "minLength": 32,
+                  "maxLength": 32
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Customer Unique Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomerSegmentResponse"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Model or data not available yet",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/predict-churn": {
+      "post": {
+        "tags": [
+          "Predictive Analytics"
+        ],
+        "summary": "Predict Churn",
+        "operationId": "predict_churn_api_predict_churn_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ChurnRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ChurnResponse"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Model or data not available yet",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/forecast-revenue": {
+      "post": {
+        "tags": [
+          "Predictive Analytics"
+        ],
+        "summary": "Forecast Revenue",
+        "operationId": "forecast_revenue_api_forecast_revenue_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RevenueForecastRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RevenueForecastResponse"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Model or data not available yet",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/forecast-demand": {
+      "post": {
+        "tags": [
+          "Predictive Analytics"
+        ],
+        "summary": "Forecast Demand",
+        "operationId": "forecast_demand_api_forecast_demand_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DemandForecastRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DemandForecastResponse"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Model or data not available yet",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/detect-anomaly": {
+      "post": {
+        "tags": [
+          "Predictive Analytics"
+        ],
+        "summary": "Detect Anomaly",
+        "operationId": "detect_anomaly_api_detect_anomaly_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AnomalyRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AnomalyResponse"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Model or data not available yet",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/anomalies": {
+      "get": {
+        "tags": [
+          "Predictive Analytics"
+        ],
+        "summary": "List Anomalies",
+        "operationId": "list_anomalies_api_anomalies_get",
+        "parameters": [
+          {
+            "name": "only_flagged",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "default": true,
+              "title": "Only Flagged"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "503": {
+            "description": "Model or data not available yet",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/model-metrics/{module}": {
+      "get": {
+        "tags": [
+          "System"
+        ],
+        "summary": "Model Metrics",
+        "operationId": "model_metrics_api_model_metrics__module__get",
+        "parameters": [
+          {
+            "name": "module",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Module"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "503": {
+            "description": "Model or data not available yet",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "AnomalyRequest": {
+        "properties": {
+          "date": {
+            "type": "string",
+            "format": "date",
+            "title": "Date"
+          },
+          "revenue": {
+            "type": "number",
+            "minimum": 0.0,
+            "title": "Revenue"
+          },
+          "orders": {
+            "type": "integer",
+            "minimum": 0.0,
+            "title": "Orders"
+          },
+          "late_rate": {
+            "type": "number",
+            "maximum": 1.0,
+            "minimum": 0.0,
+            "title": "Late Rate",
+            "default": 0.0
+          },
+          "avg_review": {
+            "type": "number",
+            "maximum": 5.0,
+            "minimum": 1.0,
+            "title": "Avg Review",
+            "default": 4.1
+          },
+          "cancel_rate": {
+            "type": "number",
+            "maximum": 1.0,
+            "minimum": 0.0,
+            "title": "Cancel Rate",
+            "default": 0.0
+          },
+          "recent_revenue": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "number"
+                },
+                "type": "array",
+                "maxItems": 90,
+                "minItems": 14
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Recent Revenue",
+            "description": "Optional trailing daily revenue (oldest->newest). Defaults to the last 28 training days."
+          },
+          "recent_orders": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "number"
+                },
+                "type": "array",
+                "maxItems": 90,
+                "minItems": 14
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Recent Orders"
+          }
+        },
+        "type": "object",
+        "required": [
+          "date",
+          "revenue",
+          "orders"
+        ],
+        "title": "AnomalyRequest",
+        "example": {
+          "avg_review": 4.1,
+          "cancel_rate": 0.004,
+          "date": "2018-08-20",
+          "late_rate": 0.05,
+          "orders": 600,
+          "revenue": 95000
+        }
+      },
+      "AnomalyResponse": {
+        "properties": {
+          "date": {
+            "type": "string",
+            "format": "date",
+            "title": "Date"
+          },
+          "is_anomaly": {
+            "type": "boolean",
+            "title": "Is Anomaly"
+          },
+          "severity": {
+            "type": "string",
+            "title": "Severity"
+          },
+          "direction": {
+            "type": "string",
+            "title": "Direction"
+          },
+          "votes": {
+            "type": "integer",
+            "title": "Votes"
+          },
+          "flags": {
+            "additionalProperties": {
+              "type": "boolean"
+            },
+            "type": "object",
+            "title": "Flags"
+          },
+          "iforest_score": {
+            "type": "number",
+            "title": "Iforest Score"
+          },
+          "rolling_z": {
+            "type": "number",
+            "title": "Rolling Z"
+          },
+          "global_z": {
+            "type": "number",
+            "title": "Global Z"
+          }
+        },
+        "type": "object",
+        "required": [
+          "date",
+          "is_anomaly",
+          "severity",
+          "direction",
+          "votes",
+          "flags",
+          "iforest_score",
+          "rolling_z",
+          "global_z"
+        ],
+        "title": "AnomalyResponse"
+      },
+      "ChurnFeatures": {
+        "properties": {
+          "customer_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 64
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Customer Id"
+          },
+          "recency_days": {
+            "type": "number",
+            "maximum": 3650.0,
+            "minimum": 0.0,
+            "title": "Recency Days"
+          },
+          "frequency": {
+            "type": "integer",
+            "maximum": 1000.0,
+            "minimum": 1.0,
+            "title": "Frequency"
+          },
+          "monetary": {
+            "type": "number",
+            "minimum": 0.0,
+            "title": "Monetary"
+          },
+          "avg_order_value": {
+            "type": "number",
+            "minimum": 0.0,
+            "title": "Avg Order Value"
+          },
+          "tenure_days": {
+            "type": "number",
+            "maximum": 3650.0,
+            "minimum": 0.0,
+            "title": "Tenure Days",
+            "default": 0
+          },
+          "avg_items": {
+            "type": "number",
+            "maximum": 100.0,
+            "minimum": 0.0,
+            "title": "Avg Items",
+            "default": 1
+          },
+          "avg_review": {
+            "anyOf": [
+              {
+                "type": "number",
+                "maximum": 5.0,
+                "minimum": 1.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Avg Review"
+          },
+          "last_review": {
+            "anyOf": [
+              {
+                "type": "number",
+                "maximum": 5.0,
+                "minimum": 1.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Last Review"
+          },
+          "pct_late": {
+            "anyOf": [
+              {
+                "type": "number",
+                "maximum": 1.0,
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Pct Late"
+          },
+          "avg_delivery_days": {
+            "anyOf": [
+              {
+                "type": "number",
+                "maximum": 365.0,
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Avg Delivery Days"
+          },
+          "avg_freight_ratio": {
+            "anyOf": [
+              {
+                "type": "number",
+                "maximum": 50.0,
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Avg Freight Ratio"
+          },
+          "max_installments": {
+            "type": "number",
+            "maximum": 36.0,
+            "minimum": 1.0,
+            "title": "Max Installments",
+            "default": 1
+          },
+          "n_categories": {
+            "type": "integer",
+            "maximum": 100.0,
+            "minimum": 0.0,
+            "title": "N Categories",
+            "default": 1
+          },
+          "days_since_first": {
+            "type": "number",
+            "maximum": 3650.0,
+            "minimum": 0.0,
+            "title": "Days Since First"
+          },
+          "customer_region": {
+            "type": "string",
+            "enum": [
+              "Norte",
+              "Nordeste",
+              "Centro-Oeste",
+              "Sudeste",
+              "Sul",
+              "Unknown"
+            ],
+            "title": "Customer Region",
+            "default": "Sudeste"
+          },
+          "last_payment_type": {
+            "type": "string",
+            "enum": [
+              "credit_card",
+              "boleto",
+              "voucher",
+              "debit_card",
+              "not_defined",
+              "unknown"
+            ],
+            "title": "Last Payment Type",
+            "default": "credit_card"
+          }
+        },
+        "type": "object",
+        "required": [
+          "recency_days",
+          "frequency",
+          "monetary",
+          "avg_order_value",
+          "days_since_first"
+        ],
+        "title": "ChurnFeatures",
+        "description": "Behavioural features of ONE customer as of the scoring date (history only).",
+        "example": {
+          "avg_delivery_days": 9.5,
+          "avg_freight_ratio": 0.18,
+          "avg_items": 1,
+          "avg_order_value": 189.9,
+          "avg_review": 5,
+          "customer_region": "Sudeste",
+          "days_since_first": 45,
+          "frequency": 1,
+          "last_payment_type": "credit_card",
+          "last_review": 5,
+          "max_installments": 3,
+          "monetary": 189.9,
+          "n_categories": 1,
+          "pct_late": 0,
+          "recency_days": 45,
+          "tenure_days": 0
+        }
+      },
+      "ChurnPrediction": {
+        "properties": {
+          "customer_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Customer Id"
+          },
+          "churn_probability": {
+            "type": "number",
+            "title": "Churn Probability"
+          },
+          "return_probability": {
+            "type": "number",
+            "title": "Return Probability"
+          },
+          "predicted_churn": {
+            "type": "boolean",
+            "title": "Predicted Churn"
+          },
+          "risk_band": {
+            "type": "string",
+            "title": "Risk Band"
+          }
+        },
+        "type": "object",
+        "required": [
+          "customer_id",
+          "churn_probability",
+          "return_probability",
+          "predicted_churn",
+          "risk_band"
+        ],
+        "title": "ChurnPrediction"
+      },
+      "ChurnRequest": {
+        "properties": {
+          "customers": {
+            "items": {
+              "$ref": "#/components/schemas/ChurnFeatures"
+            },
+            "type": "array",
+            "maxItems": 1000,
+            "minItems": 1,
+            "title": "Customers"
+          }
+        },
+        "type": "object",
+        "required": [
+          "customers"
+        ],
+        "title": "ChurnRequest"
+      },
+      "ChurnResponse": {
+        "properties": {
+          "model_name": {
+            "type": "string",
+            "title": "Model Name"
+          },
+          "threshold": {
+            "type": "number",
+            "title": "Threshold"
+          },
+          "horizon_days": {
+            "type": "integer",
+            "title": "Horizon Days"
+          },
+          "predictions": {
+            "items": {
+              "$ref": "#/components/schemas/ChurnPrediction"
+            },
+            "type": "array",
+            "title": "Predictions"
+          },
+          "disclaimer": {
+            "type": "string",
+            "title": "Disclaimer"
+          }
+        },
+        "type": "object",
+        "required": [
+          "model_name",
+          "threshold",
+          "horizon_days",
+          "predictions",
+          "disclaimer"
+        ],
+        "title": "ChurnResponse"
+      },
+      "CustomerSegmentResponse": {
+        "properties": {
+          "selected_k": {
+            "type": "integer",
+            "title": "Selected K"
+          },
+          "silhouette": {
+            "type": "number",
+            "title": "Silhouette"
+          },
+          "clusters": {
+            "items": {
+              "$ref": "#/components/schemas/SegmentSummary"
+            },
+            "type": "array",
+            "title": "Clusters"
+          },
+          "rfm_segments": {
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "type": "array",
+            "title": "Rfm Segments"
+          },
+          "customer": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Customer"
+          }
+        },
+        "type": "object",
+        "required": [
+          "selected_k",
+          "silhouette",
+          "clusters",
+          "rfm_segments"
+        ],
+        "title": "CustomerSegmentResponse"
+      },
+      "DemandForecastRequest": {
+        "properties": {
+          "category": {
+            "type": "string",
+            "maxLength": 80,
+            "minLength": 2,
+            "title": "Category"
+          },
+          "horizon_weeks": {
+            "type": "integer",
+            "maximum": 4.0,
+            "minimum": 1.0,
+            "title": "Horizon Weeks",
+            "default": 4
+          },
+          "model": {
+            "type": "string",
+            "enum": [
+              "best",
+              "naive",
+              "moving_avg_4w",
+              "seasonal_naive_52w",
+              "xgboost"
+            ],
+            "title": "Model",
+            "default": "best"
+          }
+        },
+        "type": "object",
+        "required": [
+          "category"
+        ],
+        "title": "DemandForecastRequest"
+      },
+      "DemandForecastResponse": {
+        "properties": {
+          "category": {
+            "type": "string",
+            "title": "Category"
+          },
+          "model": {
+            "type": "string",
+            "title": "Model"
+          },
+          "best_model": {
+            "type": "string",
+            "title": "Best Model"
+          },
+          "horizon_weeks": {
+            "type": "integer",
+            "title": "Horizon Weeks"
+          },
+          "unit": {
+            "type": "string",
+            "title": "Unit",
+            "default": "order lines (units) per week"
+          },
+          "backtest_wape_pct": {
+            "type": "number",
+            "title": "Backtest Wape Pct"
+          },
+          "forecast": {
+            "items": {
+              "$ref": "#/components/schemas/ForecastPoint"
+            },
+            "type": "array",
+            "title": "Forecast"
+          },
+          "available_categories": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Available Categories"
+          }
+        },
+        "type": "object",
+        "required": [
+          "category",
+          "model",
+          "best_model",
+          "horizon_weeks",
+          "backtest_wape_pct",
+          "forecast",
+          "available_categories"
+        ],
+        "title": "DemandForecastResponse"
+      },
+      "ErrorResponse": {
+        "properties": {
+          "detail": {
+            "type": "string",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "required": [
+          "detail"
+        ],
+        "title": "ErrorResponse"
+      },
+      "ForecastPoint": {
+        "properties": {
+          "date": {
+            "type": "string",
+            "format": "date",
+            "title": "Date"
+          },
+          "predicted": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Predicted"
+          },
+          "lower_95": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Lower 95"
+          },
+          "upper_95": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Upper 95"
+          },
+          "actual": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Actual"
+          }
+        },
+        "type": "object",
+        "required": [
+          "date"
+        ],
+        "title": "ForecastPoint"
+      },
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "type": "array",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "title": "HTTPValidationError"
+      },
+      "HealthResponse": {
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "ok",
+              "degraded"
+            ],
+            "title": "Status"
+          },
+          "version": {
+            "type": "string",
+            "title": "Version"
+          },
+          "models_loaded": {
+            "additionalProperties": {
+              "type": "boolean"
+            },
+            "type": "object",
+            "title": "Models Loaded"
+          },
+          "data_available": {
+            "type": "boolean",
+            "title": "Data Available"
+          },
+          "database_available": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Database Available"
+          }
+        },
+        "type": "object",
+        "required": [
+          "status",
+          "version",
+          "models_loaded",
+          "data_available"
+        ],
+        "title": "HealthResponse"
+      },
+      "KPIResponse": {
+        "properties": {
+          "period_start": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Period Start"
+          },
+          "period_end": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Period End"
+          },
+          "filters": {
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "type": "object",
+            "title": "Filters"
+          },
+          "currency": {
+            "type": "string",
+            "title": "Currency",
+            "default": "BRL"
+          },
+          "total_revenue": {
+            "type": "number",
+            "title": "Total Revenue"
+          },
+          "product_revenue": {
+            "type": "number",
+            "title": "Product Revenue"
+          },
+          "freight_revenue": {
+            "type": "number",
+            "title": "Freight Revenue"
+          },
+          "total_orders": {
+            "type": "integer",
+            "title": "Total Orders"
+          },
+          "unique_customers": {
+            "type": "integer",
+            "title": "Unique Customers"
+          },
+          "average_order_value": {
+            "type": "number",
+            "title": "Average Order Value"
+          },
+          "revenue_growth_pct": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Revenue Growth Pct",
+            "description": "vs. the immediately preceding period of equal length; null when that period starts before 2017-01-01 (sparse 2016 data)"
+          },
+          "cancellation_rate": {
+            "type": "number",
+            "title": "Cancellation Rate"
+          },
+          "on_time_delivery_rate": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "On Time Delivery Rate"
+          },
+          "avg_delivery_days": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Avg Delivery Days"
+          },
+          "avg_review_score": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Avg Review Score"
+          },
+          "repeat_customer_rate": {
+            "type": "number",
+            "title": "Repeat Customer Rate"
+          }
+        },
+        "type": "object",
+        "required": [
+          "period_start",
+          "period_end",
+          "filters",
+          "total_revenue",
+          "product_revenue",
+          "freight_revenue",
+          "total_orders",
+          "unique_customers",
+          "average_order_value",
+          "cancellation_rate",
+          "on_time_delivery_rate",
+          "avg_delivery_days",
+          "avg_review_score",
+          "repeat_customer_rate"
+        ],
+        "title": "KPIResponse"
+      },
+      "RevenueForecastRequest": {
+        "properties": {
+          "horizon_days": {
+            "type": "integer",
+            "maximum": 30.0,
+            "minimum": 1.0,
+            "title": "Horizon Days",
+            "default": 30
+          },
+          "model": {
+            "type": "string",
+            "enum": [
+              "best",
+              "seasonal_naive",
+              "sarima",
+              "xgboost",
+              "ensemble_mean"
+            ],
+            "title": "Model",
+            "default": "best"
+          },
+          "include_history_days": {
+            "type": "integer",
+            "maximum": 365.0,
+            "minimum": 0.0,
+            "title": "Include History Days",
+            "default": 0
+          }
+        },
+        "type": "object",
+        "title": "RevenueForecastRequest"
+      },
+      "RevenueForecastResponse": {
+        "properties": {
+          "model": {
+            "type": "string",
+            "title": "Model"
+          },
+          "best_model": {
+            "type": "string",
+            "title": "Best Model"
+          },
+          "horizon_days": {
+            "type": "integer",
+            "title": "Horizon Days"
+          },
+          "currency": {
+            "type": "string",
+            "title": "Currency",
+            "default": "BRL"
+          },
+          "trained_until": {
+            "type": "string",
+            "format": "date",
+            "title": "Trained Until"
+          },
+          "total_predicted": {
+            "type": "number",
+            "title": "Total Predicted"
+          },
+          "backtest_mae": {
+            "type": "number",
+            "title": "Backtest Mae"
+          },
+          "backtest_mape_pct": {
+            "type": "number",
+            "title": "Backtest Mape Pct"
+          },
+          "forecast": {
+            "items": {
+              "$ref": "#/components/schemas/ForecastPoint"
+            },
+            "type": "array",
+            "title": "Forecast"
+          },
+          "history": {
+            "items": {
+              "$ref": "#/components/schemas/ForecastPoint"
+            },
+            "type": "array",
+            "title": "History",
+            "default": []
+          }
+        },
+        "type": "object",
+        "required": [
+          "model",
+          "best_model",
+          "horizon_days",
+          "trained_until",
+          "total_predicted",
+          "backtest_mae",
+          "backtest_mape_pct",
+          "forecast"
+        ],
+        "title": "RevenueForecastResponse"
+      },
+      "SegmentSummary": {
+        "properties": {
+          "cluster": {
+            "type": "integer",
+            "title": "Cluster"
+          },
+          "cluster_name": {
+            "type": "string",
+            "title": "Cluster Name"
+          },
+          "customers": {
+            "type": "integer",
+            "title": "Customers"
+          },
+          "customer_share_pct": {
+            "type": "number",
+            "title": "Customer Share Pct"
+          },
+          "revenue_share_pct": {
+            "type": "number",
+            "title": "Revenue Share Pct"
+          },
+          "recency_median_days": {
+            "type": "number",
+            "title": "Recency Median Days"
+          },
+          "frequency_mean": {
+            "type": "number",
+            "title": "Frequency Mean"
+          },
+          "monetary_median": {
+            "type": "number",
+            "title": "Monetary Median"
+          },
+          "recommended_strategy": {
+            "type": "string",
+            "title": "Recommended Strategy"
+          }
+        },
+        "type": "object",
+        "required": [
+          "cluster",
+          "cluster_name",
+          "customers",
+          "customer_share_pct",
+          "revenue_share_pct",
+          "recency_median_days",
+          "frequency_mean",
+          "monetary_median",
+          "recommended_strategy"
+        ],
+        "title": "SegmentSummary"
+      },
+      "ValidationError": {
+        "properties": {
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Location"
+          },
+          "msg": {
+            "type": "string",
+            "title": "Message"
+          },
+          "type": {
+            "type": "string",
+            "title": "Error Type"
+          },
+          "input": {
+            "title": "Input"
+          },
+          "ctx": {
+            "type": "object",
+            "title": "Context"
+          }
+        },
+        "type": "object",
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError"
+      }
+    }
+  }
+}

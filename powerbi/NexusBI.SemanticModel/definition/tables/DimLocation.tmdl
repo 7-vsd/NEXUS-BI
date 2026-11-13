@@ -1,0 +1,90 @@
+/// Zip-prefix geography with lat/lng and macro-region.
+table DimLocation
+	lineageTag: 2dd24f2d-7102-522d-99cb-48c5af600e32
+
+	column location_key
+		dataType: int64
+		formatString: 0
+		isHidden
+		lineageTag: ba483c8a-bf9e-533a-9176-91e427407601
+		summarizeBy: none
+		sourceColumn: location_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column zip_code_prefix
+		dataType: double
+		formatString: 0.00
+		lineageTag: cd22c345-a4c1-53a5-bf0c-1433298ce6b2
+		summarizeBy: sum
+		sourceColumn: zip_code_prefix
+		dataCategory: PostalCode
+
+		annotation SummarizationSetBy = Automatic
+
+	column city
+		dataType: string
+		lineageTag: 82f385bd-dbaa-56f1-8e42-c3f2f1c52705
+		summarizeBy: none
+		sourceColumn: city
+		dataCategory: City
+
+		annotation SummarizationSetBy = Automatic
+
+	column state
+		dataType: string
+		lineageTag: 4b0f782d-fdb2-59cd-842c-8faa8c7890f0
+		summarizeBy: none
+		sourceColumn: state
+		dataCategory: StateOrProvince
+
+		annotation SummarizationSetBy = Automatic
+
+	column region
+		dataType: string
+		lineageTag: 2d3d4120-9087-5a4b-8c34-e00edad53c64
+		summarizeBy: none
+		sourceColumn: region
+
+		annotation SummarizationSetBy = Automatic
+
+	column latitude
+		dataType: double
+		formatString: 0.00
+		lineageTag: cb10295a-5bf1-5eec-b3d4-64fb9f0a1a50
+		summarizeBy: sum
+		sourceColumn: latitude
+		dataCategory: Latitude
+
+		annotation SummarizationSetBy = Automatic
+
+	column longitude
+		dataType: double
+		formatString: 0.00
+		lineageTag: c0e659a6-5329-51ee-8622-b6a5d0e187dc
+		summarizeBy: sum
+		sourceColumn: longitude
+		dataCategory: Longitude
+
+		annotation SummarizationSetBy = Automatic
+
+	column has_coordinates
+		dataType: boolean
+		lineageTag: db3a5306-45e1-5ff1-9e3c-57f845182557
+		summarizeBy: none
+		sourceColumn: has_coordinates
+
+		annotation SummarizationSetBy = Automatic
+
+	partition DimLocation = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents(DataFolder & "\dim_location.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    Promoted = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
+				    Selected = Table.SelectColumns(Promoted, {"location_key", "zip_code_prefix", "city", "state", "region", "latitude", "longitude", "has_coordinates"}),
+				    Typed = Table.TransformColumnTypes(Selected, {{"location_key", Int64.Type}, {"zip_code_prefix", type number}, {"city", type text}, {"state", type text}, {"region", type text}, {"latitude", type number}, {"longitude", type number}, {"has_coordinates", type logical}}, "en-US")
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table

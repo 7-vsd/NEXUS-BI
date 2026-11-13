@@ -1,0 +1,155 @@
+{
+  "customers": 94983,
+  "selected_k": 3,
+  "silhouette_selected": 0.39657162545062635,
+  "k_curve": [
+    {
+      "k": 2,
+      "inertia": 193512.01644661548,
+      "silhouette": 0.7157425324425202
+    },
+    {
+      "k": 3,
+      "inertia": 130815.0753865753,
+      "silhouette": 0.39657162545062635
+    },
+    {
+      "k": 4,
+      "inertia": 84571.56779749786,
+      "silhouette": 0.3920166341291785
+    },
+    {
+      "k": 5,
+      "inertia": 69846.6798422225,
+      "silhouette": 0.3518693378381311
+    },
+    {
+      "k": 6,
+      "inertia": 59675.85360992273,
+      "silhouette": 0.3511535990284978
+    },
+    {
+      "k": 7,
+      "inertia": 52083.533736789854,
+      "silhouette": 0.34736010559828273
+    },
+    {
+      "k": 8,
+      "inertia": 46235.244212557,
+      "silhouette": 0.34316224909212034
+    },
+    {
+      "k": 9,
+      "inertia": 41388.022262019294,
+      "silhouette": 0.3443704633045436
+    },
+    {
+      "k": 10,
+      "inertia": 37074.14404382946,
+      "silhouette": 0.33942884340706553
+    }
+  ],
+  "clusters": [
+    {
+      "cluster": 0,
+      "customers": 24029,
+      "recency_mean": 66.04968995796746,
+      "recency_median": 65.0,
+      "frequency_mean": 1.0,
+      "monetary_mean": 170.33264763410878,
+      "monetary_median": 111.17,
+      "revenue": 4092923.19,
+      "cluster_name": "Recent One-Time Buyers",
+      "revenue_share_pct": 26.01,
+      "customer_share_pct": 25.3,
+      "recommended_strategy": "Drive the 2nd order: post-delivery cross-sell within 30-60 days, review request, free-shipping threshold."
+    },
+    {
+      "cluster": 1,
+      "customers": 68067,
+      "recency_mean": 307.9884672455081,
+      "recency_median": 284.0,
+      "frequency_mean": 1.0,
+      "monetary_mean": 157.96771754300912,
+      "monetary_median": 103.86,
+      "revenue": 10752388.63,
+      "cluster_name": "Lapsed One-Time Buyers",
+      "revenue_share_pct": 68.33,
+      "customer_share_pct": 71.66,
+      "recommended_strategy": "Low-cost automated win-back (email/push) on the category bought; exclude from paid retargeting."
+    },
+    {
+      "cluster": 2,
+      "customers": 2887,
+      "recency_mean": 227.445791479044,
+      "recency_median": 207.0,
+      "frequency_mean": 2.1139591271215794,
+      "monetary_mean": 308.3530342916522,
+      "monetary_median": 225.55,
+      "revenue": 890215.21,
+      "cluster_name": "Loyal Repeat Buyers",
+      "revenue_share_pct": 5.66,
+      "customer_share_pct": 3.04,
+      "recommended_strategy": "Protect: VIP perks, early access, referral programme; monitor for lapses."
+    }
+  ],
+  "rfm_segments": [
+    {
+      "rfm_segment": "At Risk - High Value",
+      "customers": 13989,
+      "avg_recency": 400.9373793695046,
+      "avg_monetary": 309.10452784330545,
+      "revenue": 4324063.24,
+      "strategy": "Personal win-back offer."
+    },
+    {
+      "rfm_segment": "Champions",
+      "customers": 1241,
+      "avg_recency": 94.87671232876713,
+      "avg_monetary": 321.27368251410155,
+      "revenue": 398700.64,
+      "strategy": "Reward and retain; ask for reviews/referrals."
+    },
+    {
+      "rfm_segment": "Hibernating",
+      "customers": 22968,
+      "avg_recency": 402.17446011842566,
+      "avg_monetary": 72.76668146987112,
+      "revenue": 1671305.14,
+      "strategy": "Low-cost automated reactivation only."
+    },
+    {
+      "rfm_segment": "Loyal - Lapsing",
+      "customers": 1646,
+      "avg_recency": 327.39611178614825,
+      "avg_monetary": 298.61152490886997,
+      "revenue": 491514.57,
+      "strategy": "Re-engage loyal buyers before they churn."
+    },
+    {
+      "rfm_segment": "Needs Attention",
+      "customers": 18387,
+      "avg_recency": 226.24452058519606,
+      "avg_monetary": 152.039859683472,
+      "revenue": 2795556.9,
+      "strategy": "Time-limited incentive to return."
+    },
+    {
+      "rfm_segment": "New High-Value",
+      "customers": 14646,
+      "avg_recency": 97.6888570258091,
+      "avg_monetary": 303.0770626792298,
+      "revenue": 4438866.66,
+      "strategy": "Onboard and drive the second order."
+    },
+    {
+      "rfm_segment": "New Low-Value",
+      "customers": 22106,
+      "avg_recency": 95.6479688772279,
+      "avg_monetary": 73.08060617027051,
+      "revenue": 1615519.88,
+      "strategy": "Nurture with discovery content."
+    }
+  ],
+  "snapshot_date": "2018-09-04 00:00:00"
+}

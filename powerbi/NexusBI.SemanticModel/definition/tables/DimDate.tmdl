@@ -1,0 +1,183 @@
+/// Calendar dimension (one row per day). Marked as date table.
+table DimDate
+	dataCategory: Time
+	lineageTag: 165d57b9-705e-5f99-a880-ed004a6fd446
+
+	column date_key
+		dataType: int64
+		formatString: 0
+		lineageTag: fb40b88a-8238-5432-9770-6447b38996d3
+		summarizeBy: none
+		sourceColumn: date_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column full_date
+		dataType: dateTime
+		formatString: yyyy-mm-dd
+		lineageTag: a130c532-d733-55da-a22e-35dcea74f80d
+		summarizeBy: none
+		sourceColumn: full_date
+		isKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column year
+		dataType: int64
+		formatString: 0
+		lineageTag: a353662e-06c1-5c1b-b3d9-0d6a4ef4364d
+		summarizeBy: none
+		sourceColumn: year
+
+		annotation SummarizationSetBy = Automatic
+
+	column quarter
+		dataType: int64
+		formatString: 0
+		lineageTag: 9403f119-8c52-5494-8b1e-0847f7632df5
+		summarizeBy: none
+		sourceColumn: quarter
+
+		annotation SummarizationSetBy = Automatic
+
+	column quarter_label
+		dataType: string
+		lineageTag: da943fe0-dbc0-501a-b7a4-31f8b94b4918
+		summarizeBy: none
+		sourceColumn: quarter_label
+
+		annotation SummarizationSetBy = Automatic
+
+	column month
+		dataType: int64
+		formatString: 0
+		lineageTag: c3382aee-8247-5969-b2f9-8229181ceea5
+		summarizeBy: none
+		sourceColumn: month
+
+		annotation SummarizationSetBy = Automatic
+
+	column month_name
+		dataType: string
+		lineageTag: a99fd461-a6fe-526c-951b-4a4e4b23e625
+		summarizeBy: none
+		sourceColumn: month_name
+		sortByColumn: month
+
+		annotation SummarizationSetBy = Automatic
+
+	column month_short
+		dataType: string
+		lineageTag: dbb67e51-be34-5abe-b408-369a587a7fb4
+		summarizeBy: none
+		sourceColumn: month_short
+		sortByColumn: month
+
+		annotation SummarizationSetBy = Automatic
+
+	column year_month
+		dataType: string
+		lineageTag: 339bd345-5605-5b0b-bf2c-d57d6d22aeb3
+		summarizeBy: none
+		sourceColumn: year_month
+
+		annotation SummarizationSetBy = Automatic
+
+	column month_start
+		dataType: dateTime
+		formatString: yyyy-mm-dd
+		lineageTag: aa1ba646-04ed-542b-b3d6-0206b3d12f63
+		summarizeBy: none
+		sourceColumn: month_start
+
+		annotation SummarizationSetBy = Automatic
+
+	column iso_week
+		dataType: int64
+		formatString: 0
+		lineageTag: dc3a5a3f-db4a-58fa-ad29-e6adc9a09fb2
+		summarizeBy: sum
+		sourceColumn: iso_week
+
+		annotation SummarizationSetBy = Automatic
+
+	column week_start
+		dataType: dateTime
+		formatString: yyyy-mm-dd
+		lineageTag: d3856d3a-e1f5-5c0d-9d08-6cad9e5de45e
+		summarizeBy: none
+		sourceColumn: week_start
+
+		annotation SummarizationSetBy = Automatic
+
+	column day_of_month
+		dataType: int64
+		formatString: 0
+		lineageTag: 18adcbfa-cadf-5e39-b412-72931397d74e
+		summarizeBy: none
+		sourceColumn: day_of_month
+
+		annotation SummarizationSetBy = Automatic
+
+	column day_of_week
+		dataType: int64
+		formatString: 0
+		lineageTag: 479b0304-c995-51de-b435-04a4334a0719
+		summarizeBy: sum
+		sourceColumn: day_of_week
+
+		annotation SummarizationSetBy = Automatic
+
+	column day_name
+		dataType: string
+		lineageTag: f2b42c6d-0122-50c7-8d5c-83765c0e26e3
+		summarizeBy: none
+		sourceColumn: day_name
+		sortByColumn: day_of_week
+
+		annotation SummarizationSetBy = Automatic
+
+	column is_weekend
+		dataType: boolean
+		lineageTag: 95af2dff-621f-54f0-9b46-63f266fa39f8
+		summarizeBy: none
+		sourceColumn: is_weekend
+
+		annotation SummarizationSetBy = Automatic
+
+	column is_holiday_br
+		dataType: boolean
+		lineageTag: f59dc39e-e06b-54bb-9b9c-ff64995a83aa
+		summarizeBy: none
+		sourceColumn: is_holiday_br
+
+		annotation SummarizationSetBy = Automatic
+
+	column holiday_name
+		dataType: string
+		lineageTag: 35aabec4-1f97-5ce3-b456-d7599cab339d
+		summarizeBy: none
+		sourceColumn: holiday_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column is_black_friday
+		dataType: boolean
+		lineageTag: 96065ec5-1989-5eba-9513-9de43df5abe5
+		summarizeBy: none
+		sourceColumn: is_black_friday
+
+		annotation SummarizationSetBy = Automatic
+
+	partition DimDate = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents(DataFolder & "\dim_date.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    Promoted = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
+				    Selected = Table.SelectColumns(Promoted, {"date_key", "full_date", "year", "quarter", "quarter_label", "month", "month_name", "month_short", "year_month", "month_start", "iso_week", "week_start", "day_of_month", "day_of_week", "day_name", "is_weekend", "is_holiday_br", "holiday_name", "is_black_friday"}),
+				    Typed = Table.TransformColumnTypes(Selected, {{"date_key", Int64.Type}, {"full_date", type date}, {"year", Int64.Type}, {"quarter", Int64.Type}, {"quarter_label", type text}, {"month", Int64.Type}, {"month_name", type text}, {"month_short", type text}, {"year_month", type text}, {"month_start", type date}, {"iso_week", Int64.Type}, {"week_start", type date}, {"day_of_month", Int64.Type}, {"day_of_week", Int64.Type}, {"day_name", type text}, {"is_weekend", type logical}, {"is_holiday_br", type logical}, {"holiday_name", type text}, {"is_black_friday", type logical}}, "en-US")
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table

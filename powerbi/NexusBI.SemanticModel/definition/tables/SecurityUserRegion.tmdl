@@ -1,0 +1,32 @@
+/// RLS mapping of user e-mail (UPN) to allowed customer regions.
+table SecurityUserRegion
+	lineageTag: cc7600b8-6b81-58cb-9f13-d02353838ef1
+
+	column user_email
+		dataType: string
+		lineageTag: c871cf69-dde9-5ab0-a5c6-4c6514395277
+		summarizeBy: none
+		sourceColumn: user_email
+
+		annotation SummarizationSetBy = Automatic
+
+	column region
+		dataType: string
+		lineageTag: 9060e37d-2606-5357-aad2-79d353319017
+		summarizeBy: none
+		sourceColumn: region
+
+		annotation SummarizationSetBy = Automatic
+
+	partition SecurityUserRegion = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents(DataFolder & "\security_user_region.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    Promoted = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
+				    Selected = Table.SelectColumns(Promoted, {"user_email", "region"}),
+				    Typed = Table.TransformColumnTypes(Selected, {{"user_email", type text}, {"region", type text}}, "en-US")
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table

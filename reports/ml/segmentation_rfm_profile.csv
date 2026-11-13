@@ -1,0 +1,8 @@
+rfm_segment,customers,avg_recency,avg_monetary,revenue,strategy
+At Risk - High Value,13989,400.9373793695046,309.10452784330545,4324063.24,Personal win-back offer.
+Champions,1241,94.87671232876713,321.27368251410155,398700.64,Reward and retain; ask for reviews/referrals.
+Hibernating,22968,402.17446011842566,72.76668146987112,1671305.14,Low-cost automated reactivation only.
+Loyal - Lapsing,1646,327.39611178614825,298.61152490886997,491514.57,Re-engage loyal buyers before they churn.
+Needs Attention,18387,226.24452058519606,152.039859683472,2795556.9,Time-limited incentive to return.
+New High-Value,14646,97.6888570258091,303.0770626792298,4438866.66,Onboard and drive the second order.
+New Low-Value,22106,95.6479688772279,73.08060617027051,1615519.88,Nurture with discovery content.

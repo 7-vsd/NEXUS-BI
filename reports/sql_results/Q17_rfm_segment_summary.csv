@@ -1,0 +1,8 @@
+rfm_segment,customers,avg_recency,avg_frequency,avg_monetary,revenue_share_pct
+Hibernating,22957,446.2,1.000,72.83,10.63
+New Low-Value,22074,139.5,1.000,73.13,10.26
+Needs Attention,18381,270.2,1.000,151.55,17.70
+New High-Value,14679,141.9,1.000,303.15,28.28
+At Risk - High Value,14005,444.8,1.000,308.72,27.48
+Loyal - Lapsing,1646,371.4,2.081,298.31,3.12
+Champions,1241,138.9,2.157,321.68,2.54

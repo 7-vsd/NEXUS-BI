@@ -1,0 +1,134 @@
+/// Customer dimension – SCD Type 2 on address (one row per customer version).
+table DimCustomer
+	lineageTag: c0e544a4-3fd5-59fe-b7d0-665251ba4066
+
+	column customer_key
+		dataType: int64
+		formatString: 0
+		isHidden
+		lineageTag: 4353f44e-31e8-59fd-a935-f19d4c9ff3ce
+		summarizeBy: none
+		sourceColumn: customer_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column customer_unique_id
+		dataType: string
+		lineageTag: 6f02a823-f4e5-53b3-a5dd-628419985a1d
+		summarizeBy: none
+		sourceColumn: customer_unique_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column zip_code_prefix
+		dataType: double
+		formatString: 0.00
+		lineageTag: 977dc7f0-56e9-5c07-8f22-5c1a7529d847
+		summarizeBy: sum
+		sourceColumn: zip_code_prefix
+		dataCategory: PostalCode
+
+		annotation SummarizationSetBy = Automatic
+
+	column city
+		dataType: string
+		lineageTag: dcf1bcb0-deab-5b6b-a7fe-dc4bfb4e0d51
+		summarizeBy: none
+		sourceColumn: city
+		dataCategory: City
+
+		annotation SummarizationSetBy = Automatic
+
+	column state
+		dataType: string
+		lineageTag: 3e46dd8a-57f0-51a4-a48f-49358391b737
+		summarizeBy: none
+		sourceColumn: state
+		dataCategory: StateOrProvince
+
+		annotation SummarizationSetBy = Automatic
+
+	column region
+		dataType: string
+		lineageTag: 663310a4-f7e1-5325-bf7e-bb5e1614102d
+		summarizeBy: none
+		sourceColumn: region
+
+		annotation SummarizationSetBy = Automatic
+
+	column location_key
+		dataType: int64
+		formatString: 0
+		isHidden
+		lineageTag: 2f351a1a-097b-5e93-ab02-a283efd7f3c9
+		summarizeBy: none
+		sourceColumn: location_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column version_number
+		dataType: int64
+		formatString: 0
+		lineageTag: 5ffeb514-ed60-5713-8ffb-1d141b70a191
+		summarizeBy: sum
+		sourceColumn: version_number
+
+		annotation SummarizationSetBy = Automatic
+
+	column valid_from
+		dataType: dateTime
+		formatString: yyyy-mm-dd hh:nn:ss
+		lineageTag: ecccbc25-a846-531c-b73b-8fd63d8f5a66
+		summarizeBy: none
+		sourceColumn: valid_from
+
+		annotation SummarizationSetBy = Automatic
+
+	column valid_to
+		dataType: dateTime
+		formatString: yyyy-mm-dd hh:nn:ss
+		lineageTag: c79480dc-9d49-5ac8-8a70-0037e6e2cc0a
+		summarizeBy: none
+		sourceColumn: valid_to
+
+		annotation SummarizationSetBy = Automatic
+
+	column is_current
+		dataType: boolean
+		lineageTag: 6122bd79-2859-53be-bda7-b14e197a0e82
+		summarizeBy: none
+		sourceColumn: is_current
+
+		annotation SummarizationSetBy = Automatic
+
+	column first_order_date
+		dataType: dateTime
+		formatString: yyyy-mm-dd
+		lineageTag: aa8b912c-a191-5c27-8a3f-cda2c8beddb9
+		summarizeBy: none
+		sourceColumn: first_order_date
+
+		annotation SummarizationSetBy = Automatic
+
+	column first_order_month
+		dataType: dateTime
+		formatString: yyyy-mm
+		lineageTag: 40064961-9474-58c0-befc-836393f4b5fa
+		summarizeBy: none
+		sourceColumn: first_order_month
+
+		annotation SummarizationSetBy = Automatic
+
+	partition DimCustomer = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents(DataFolder & "\dim_customer.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    Promoted = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
+				    Selected = Table.SelectColumns(Promoted, {"customer_key", "customer_unique_id", "zip_code_prefix", "city", "state", "region", "location_key", "version_number", "valid_from", "valid_to", "is_current", "first_order_date"}),
+				    Typed = Table.TransformColumnTypes(Selected, {{"customer_key", Int64.Type}, {"customer_unique_id", type text}, {"zip_code_prefix", type number}, {"city", type text}, {"state", type text}, {"region", type text}, {"location_key", Int64.Type}, {"version_number", Int64.Type}, {"valid_from", type datetime}, {"valid_to", type datetime}, {"is_current", type logical}, {"first_order_date", type date}}, "en-US"),
+				    WithCohort = Table.AddColumn(Typed, "first_order_month", each if [first_order_date] = null then null else Date.StartOfMonth([first_order_date]), type date)
+				in
+				    WithCohort
+
+	annotation PBI_ResultType = Table

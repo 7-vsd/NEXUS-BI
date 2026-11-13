@@ -1,0 +1,30 @@
+{
+  "module": "revenue_forecasting",
+  "trained_at": "2026-11-13T05:33:56.575739+00:00",
+  "python": "3.10.11",
+  "sklearn": "1.7.2",
+  "random_seed": 42,
+  "best_model": "ensemble_mean",
+  "sarima_order": [
+    1,
+    1,
+    1
+  ],
+  "sarima_seasonal": [
+    1,
+    0,
+    1,
+    7
+  ],
+  "xgb_lags": [
+    30,
+    31,
+    35,
+    42,
+    49,
+    56,
+    63,
+    91
+  ],
+  "series_end": "2018-08-21"
+}

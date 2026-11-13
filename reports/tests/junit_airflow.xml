@@ -1,0 +1,1 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="0" skipped="0" tests="1" time="1.643" timestamp="2026-11-12T15:13:50.370093+00:00" hostname="vm"><testcase classname="tests.integration.test_powerbi_and_app" name="test_dag_parses_in_airflow" time="1.618" /></testsuite></testsuites>

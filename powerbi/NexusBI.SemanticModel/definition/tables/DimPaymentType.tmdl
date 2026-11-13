@@ -1,0 +1,50 @@
+/// Payment method dimension.
+table DimPaymentType
+	lineageTag: 55cfa75d-ec16-5e71-9507-5acfb0291ddb
+
+	column payment_type_key
+		dataType: int64
+		formatString: 0
+		isHidden
+		lineageTag: 6ffbce48-37b7-5dfb-b870-54e9354c8d1e
+		summarizeBy: none
+		sourceColumn: payment_type_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column payment_type
+		dataType: string
+		lineageTag: e2af7125-0f2e-5503-a3de-352c8e037a08
+		summarizeBy: none
+		sourceColumn: payment_type
+
+		annotation SummarizationSetBy = Automatic
+
+	column payment_type_label
+		dataType: string
+		lineageTag: 352809c7-c1dd-5864-8997-7fcafa571d6f
+		summarizeBy: none
+		sourceColumn: payment_type_label
+
+		annotation SummarizationSetBy = Automatic
+
+	column is_card
+		dataType: boolean
+		lineageTag: c74a63e8-8fca-52be-be27-0117dce2b03d
+		summarizeBy: none
+		sourceColumn: is_card
+
+		annotation SummarizationSetBy = Automatic
+
+	partition DimPaymentType = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents(DataFolder & "\dim_payment_type.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    Promoted = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
+				    Selected = Table.SelectColumns(Promoted, {"payment_type_key", "payment_type", "payment_type_label", "is_card"}),
+				    Typed = Table.TransformColumnTypes(Selected, {{"payment_type_key", Int64.Type}, {"payment_type", type text}, {"payment_type_label", type text}, {"is_card", type logical}}, "en-US")
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table

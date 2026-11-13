@@ -1,0 +1,8 @@
+QUERY PLAN
+Bitmap Heap Scan on mv_daily_kpis  (cost=4.31..12.45 rows=3 width=36) (actual time=0.062..0.087 rows=90 loops=1)
+  Recheck Cond: ((full_date >= '2018-01-01'::date) AND (full_date <= '2018-03-31'::date))
+  Heap Blocks: exact=3
+  ->  Bitmap Index Scan on ux_mv_daily_kpis  (cost=0.00..4.31 rows=3 width=0) (actual time=0.052..0.052 rows=90 loops=1)
+        Index Cond: ((full_date >= '2018-01-01'::date) AND (full_date <= '2018-03-31'::date))
+Planning Time: 2.373 ms
+Execution Time: 0.122 ms

@@ -1,0 +1,7 @@
+/// Dynamic RLS: users see customers of the regions mapped to their UPN in SecurityUserRegion.
+role 'Regional Manager (Dynamic)'
+	modelPermission: read
+
+	tablePermission DimCustomer = DimCustomer[region] IN CALCULATETABLE ( VALUES ( SecurityUserRegion[region] ), SecurityUserRegion[user_email] = USERPRINCIPALNAME () )
+
+	tablePermission SecurityUserRegion = SecurityUserRegion[user_email] = USERPRINCIPALNAME ()

@@ -1,0 +1,77 @@
+/// ML: daily revenue backtest + 30-day forecast per model.
+table RevenueForecast
+	lineageTag: c887f3bd-c2bb-59cb-9fb7-991cca0ac85f
+
+	column forecast_date
+		dataType: dateTime
+		formatString: yyyy-mm-dd
+		lineageTag: 64992d54-f47d-576e-a076-08f8408aeb91
+		summarizeBy: none
+		sourceColumn: forecast_date
+
+		annotation SummarizationSetBy = Automatic
+
+	column model_name
+		dataType: string
+		lineageTag: 08418172-dcc3-5d76-875a-8e65c2b6c51d
+		summarizeBy: none
+		sourceColumn: model_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column kind
+		dataType: string
+		lineageTag: b535d3b0-7377-5908-aaed-faae95442ca0
+		summarizeBy: none
+		sourceColumn: kind
+
+		annotation SummarizationSetBy = Automatic
+
+	column actual
+		dataType: decimal
+		formatString: #,0.00
+		lineageTag: 6f945a68-ca2e-59bd-bbfc-ff647386fd81
+		summarizeBy: sum
+		sourceColumn: actual
+
+		annotation SummarizationSetBy = Automatic
+
+	column predicted
+		dataType: decimal
+		formatString: #,0.00
+		lineageTag: 3c3b4d6f-3ad9-5397-964d-df1e62f525ef
+		summarizeBy: sum
+		sourceColumn: predicted
+
+		annotation SummarizationSetBy = Automatic
+
+	column lower_95
+		dataType: decimal
+		formatString: #,0.00
+		lineageTag: f95b9f79-0f64-51da-bedf-6391394969c7
+		summarizeBy: sum
+		sourceColumn: lower_95
+
+		annotation SummarizationSetBy = Automatic
+
+	column upper_95
+		dataType: decimal
+		formatString: #,0.00
+		lineageTag: 0c05b221-65c7-55e3-8e4c-e34cce35b3ad
+		summarizeBy: sum
+		sourceColumn: upper_95
+
+		annotation SummarizationSetBy = Automatic
+
+	partition RevenueForecast = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents(DataFolder & "\revenue_forecast.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    Promoted = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
+				    Selected = Table.SelectColumns(Promoted, {"forecast_date", "model_name", "kind", "actual", "predicted", "lower_95", "upper_95"}),
+				    Typed = Table.TransformColumnTypes(Selected, {{"forecast_date", type date}, {"model_name", type text}, {"kind", type text}, {"actual", Currency.Type}, {"predicted", Currency.Type}, {"lower_95", Currency.Type}, {"upper_95", Currency.Type}}, "en-US")
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table

@@ -1,0 +1,53 @@
+dataset,column,dtype,non_null,nulls,null_pct,distinct,top_values,min_len,max_len,min,p25,median,mean,p75,max,std
+category_translation,product_category_name,string,71,0,0.0,71,beleza_saude (1); informatica_acessorios (1); automotivo (1),3.0,46.0,,,,,,,
+category_translation,product_category_name_english,string,71,0,0.0,71,health_beauty (1); computers_accessories (1); auto (1),3.0,39.0,,,,,,,
+customers,customer_id,string,99441,0,0.0,99441,274fa6071e5e17fe303b9748641082c8 (1); e5ed7280cd1a3ac2ba29fd6650d8867c (1); c6ece8a5137f3c9c3a3a12302a19a2ac (1),32.0,32.0,,,,,,,
+customers,customer_unique_id,string,99441,0,0.0,96096,8d50f5eadf50201ccdcedfb9e2ac8455 (17); 3e43e6105506432c953e165fb2acf44c (9); 6469f99c1f9dfae7733b25662e7f1782 (7),32.0,32.0,,,,,,,
+customers,customer_zip_code_prefix,string,99441,0,0.0,14994,22790 (142); 24220 (124); 22793 (121),5.0,5.0,,,,,,,
+customers,customer_city,string,99441,0,0.0,4119,sao paulo (15540); rio de janeiro (6882); belo horizonte (2773),3.0,32.0,,,,,,,
+customers,customer_state,string,99441,0,0.0,27,SP (41746); RJ (12852); MG (11635),2.0,2.0,,,,,,,
+geolocation,geolocation_zip_code_prefix,string,1000163,0,0.0,19015,24220 (1146); 24230 (1102); 38400 (965),5.0,5.0,,,,,,,
+geolocation,geolocation_lat,float64,1000163,0,0.0,717360,,,,-36.6053744107061,-23.60354554038031,-22.91937749486411,-21.176152910383966,-19.97962033957529,45.06593318269697,5.715866308822852
+geolocation,geolocation_lng,float64,1000163,0,0.0,717613,,,,-101.46676644931476,-48.573172180526896,-46.63787866960149,-46.39054132093579,-43.7677088028139,121.10539381057764,4.269748306619603
+geolocation,geolocation_city,string,1000163,0,0.0,8010,sao paulo (135800); rio de janeiro (62151); belo horizonte (27805),2.0,38.0,,,,,,,
+geolocation,geolocation_state,string,1000163,0,0.0,27,SP (404268); MG (126336); RJ (121169),2.0,2.0,,,,,,,
+order_items,order_id,string,112650,0,0.0,98666,8272b63d03f5f79c56e9e4120aec44ef (21); 1b15974a0141d54e36626dca3fdc731a (20); ab14fdcfbe524636d65ee38360e22ce8 (20),32.0,32.0,,,,,,,
+order_items,order_item_id,Int64,112650,0,0.0,21,,,,1.0,1.0,1.0,1.1978339991122948,1.0,21.0,0.7051240313951733
+order_items,product_id,string,112650,0,0.0,32951,aca2eb7d00ea1a7b8ebd4e68314663af (527); 99a4788cb24856965c36a24e339b6058 (488); 422879e10f46682990de24d770e7f83d (484),32.0,32.0,,,,,,,
+order_items,seller_id,string,112650,0,0.0,3095,6560211a19b47992c3666cc44a7e94c0 (2033); 4a3ca9315b744ce9f8e9374361493884 (1987); 1f50f920176fa81dab994f9023523100 (1931),32.0,32.0,,,,,,,
+order_items,shipping_limit_date,datetime64[ns],112650,0,0.0,93318,,,,2016-09-19 00:15:34,,,,,2020-04-09 22:35:08,
+order_items,price,float64,112650,0,0.0,5968,,,,0.85,39.9,74.99,120.65373901464716,134.9,6735.0,183.63392805025939
+order_items,freight_value,float64,112650,0,0.0,6999,,,,0.0,13.08,16.26,19.990319928983578,21.15,409.68,15.806405412297083
+orders,order_id,string,99441,0,0.0,99441,66dea50a8b16d9b4dee7af250b4be1a5 (1); 6ec4642f9993cc34f826cfb9068e5a2f (1); 38e9133ce29f6bbe35aed9c3863dce01 (1),32.0,32.0,,,,,,,
+orders,customer_id,string,99441,0,0.0,99441,edb027a75a1449115f6b43211ae02a24 (1); f00bb12620b7b232233cace1b229db18 (1); ad312389a098ceff46ce92c4595c06d0 (1),32.0,32.0,,,,,,,
+orders,order_status,string,99441,0,0.0,8,delivered (96478); shipped (1107); canceled (625),7.0,11.0,,,,,,,
+orders,order_purchase_timestamp,datetime64[ns],99441,0,0.0,98875,,,,2016-09-04 21:15:19,,,,,2018-10-17 17:30:18,
+orders,order_approved_at,datetime64[ns],99281,160,0.161,90733,,,,2016-09-15 12:16:38,,,,,2018-09-03 17:40:06,
+orders,order_delivered_carrier_date,datetime64[ns],97658,1783,1.793,81018,,,,2016-10-08 10:34:01,,,,,2018-09-11 19:48:28,
+orders,order_delivered_customer_date,datetime64[ns],96476,2965,2.982,95664,,,,2016-10-11 13:46:32,,,,,2018-10-17 13:22:46,
+orders,order_estimated_delivery_date,datetime64[ns],99441,0,0.0,459,,,,2016-09-30 00:00:00,,,,,2018-11-12 00:00:00,
+payments,order_id,string,103886,0,0.0,99440,fa65dad1b0e818e3ccc5cb0e39231352 (29); ccf804e764ed5650cd8759557269dc13 (26); 285c2e15bebd4ac83635ccc563dc71f4 (22),32.0,32.0,,,,,,,
+payments,payment_sequential,Int64,103886,0,0.0,29,,,,1.0,1.0,1.0,1.0926785129853878,1.0,29.0,0.7065837791949956
+payments,payment_type,string,103886,0,0.0,5,credit_card (76795); boleto (19784); voucher (5775),6.0,11.0,,,,,,,
+payments,payment_installments,Int64,103886,0,0.0,24,,,,0.0,1.0,1.0,2.853348863176944,4.0,24.0,2.6870506738564797
+payments,payment_value,float64,103886,0,0.0,29077,,,,0.0,56.79,100.0,154.10038041699553,171.8375,13664.08,217.49406386472435
+products,product_id,string,32951,0,0.0,32951,106392145fca363410d287a815be6de4 (1); 1e9e8ef04dbcff4541ed26657ea517e5 (1); 3aa071139cb16b67ca9e5dea641aaa2f (1),32.0,32.0,,,,,,,
+products,product_category_name,string,32341,610,1.851,73,cama_mesa_banho (3029); esporte_lazer (2867); moveis_decoracao (2657),3.0,46.0,,,,,,,
+products,product_name_lenght,float64,32341,610,1.851,66,,,,5.0,42.0,51.0,48.47694876472589,57.0,76.0,10.245740725237239
+products,product_description_lenght,float64,32341,610,1.851,2960,,,,4.0,339.0,595.0,771.4952846232337,972.0,3992.0,635.1152246349538
+products,product_photos_qty,float64,32341,610,1.851,19,,,,1.0,1.0,1.0,2.1889861166939797,3.0,20.0,1.7367656379315446
+products,product_weight_g,float64,32949,2,0.006,2204,,,,0.0,300.0,700.0,2276.4724877841513,1900.0,40425.0,4282.038730977007
+products,product_length_cm,float64,32949,2,0.006,99,,,,7.0,18.0,25.0,30.81507784758263,38.0,105.0,16.914458054065967
+products,product_height_cm,float64,32949,2,0.006,102,,,,2.0,8.0,13.0,16.937661234028347,21.0,105.0,13.637554061749494
+products,product_width_cm,float64,32949,2,0.006,95,,,,6.0,15.0,20.0,23.196728277034204,30.0,118.0,12.079047453227835
+reviews,review_id,string,99224,0,0.0,98410,08528f70f579f0c830189efc523d2182 (3); c444278834184f72b1484dfe47de7f97 (3); 39b4603793c1c7f5f36d809b4a218664 (3),32.0,32.0,,,,,,,
+reviews,order_id,string,99224,0,0.0,98673,df56136b8031ecd28e200bb18e6ddb2e (3); c88b1d1b157a9999ce368f218a407141 (3); 03c939fd7fd3b38f8485a0f95798f1f6 (3),32.0,32.0,,,,,,,
+reviews,review_score,Int64,99224,0,0.0,5,,,,1.0,4.0,5.0,4.08642062404257,5.0,5.0,1.3475791311150982
+reviews,review_comment_title,string,11568,87656,88.342,4179,Recomendo (485); Ótimo (447); Excelente (367),0.0,26.0,,,,,,,
+reviews,review_comment_message,string,40977,58247,58.703,35617,Muito bom (305); Bom (215); Ótimo (158),0.0,208.0,,,,,,,
+reviews,review_creation_date,datetime64[ns],99224,0,0.0,636,,,,2016-10-02 00:00:00,,,,,2018-08-31 00:00:00,
+reviews,review_answer_timestamp,datetime64[ns],99224,0,0.0,98248,,,,2016-10-07 18:32:28,,,,,2018-10-29 12:27:35,
+sellers,seller_id,string,3095,0,0.0,3095,9e25199f6ef7e7c347120ff175652c3b (1); 3442f8959a84dea7ee197c632cb2df15 (1); d1b65fc7debc3361ea86b5f14c68d2e2 (1),32.0,32.0,,,,,,,
+sellers,seller_zip_code_prefix,string,3095,0,0.0,2246,14940 (49); 13660 (10); 16200 (9),5.0,5.0,,,,,,,
+sellers,seller_city,string,3095,0,0.0,611,sao paulo (694); curitiba (127); rio de janeiro (96),2.0,40.0,,,,,,,
+sellers,seller_state,string,3095,0,0.0,23,SP (1849); PR (349); MG (244),2.0,2.0,,,,,,,

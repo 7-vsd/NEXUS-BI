@@ -1,0 +1,5 @@
+# Optional: Apache Airflow for orchestration (install in a SEPARATE virtual environment or use Docker;
+# Airflow pins many transitive dependencies). Tested: apache-airflow 3.1.8 on Python 3.13 (Linux).
+# Airflow does not support native Windows – use WSL2 or the docker-compose "airflow" profile.
+apache-airflow>=2.9,<3.2
+-r requirements.txt

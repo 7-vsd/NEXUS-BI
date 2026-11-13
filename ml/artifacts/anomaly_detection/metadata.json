@@ -1,0 +1,18 @@
+{
+  "module": "anomaly_detection",
+  "trained_at": "2026-11-13T05:34:00.853030+00:00",
+  "python": "3.10.11",
+  "sklearn": "1.7.2",
+  "random_seed": 42,
+  "features": [
+    "revenue_vs_trend",
+    "orders_vs_trend",
+    "aov",
+    "late_rate",
+    "avg_review",
+    "cancel_rate"
+  ],
+  "contamination": 0.02,
+  "rolling_window": 28,
+  "z_threshold": 3.0
+}

@@ -1,0 +1,3 @@
+route_type,items,avg_freight,avg_delivery_days,late_rate_pct
+Cross state,70328,23.63,15.05,7.81
+Same state,39861,13.45,7.93,4.45

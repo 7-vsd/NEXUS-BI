@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Report",
+    "displayName": "NexusBI"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "00c445a4-68ce-5cfc-8754-17e7299a085a"
+  }
+}

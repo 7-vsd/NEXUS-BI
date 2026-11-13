@@ -1,0 +1,101 @@
+dataset,check,column,failed_rows,total_rows,severity,detail,failed_pct,status
+category_translation,null_check,product_category_name,0,71,ERROR,,0.0,PASS
+category_translation,null_check,product_category_name_english,0,71,WARNING,,0.0,PASS
+category_translation,duplicate_full_row,*,0,71,WARNING,,0.0,PASS
+category_translation,duplicate_primary_key,product_category_name,0,71,ERROR,,0.0,PASS
+customers,null_check,customer_id,0,99441,ERROR,,0.0,PASS
+customers,null_check,customer_unique_id,0,99441,WARNING,,0.0,PASS
+customers,null_check,customer_zip_code_prefix,0,99441,WARNING,,0.0,PASS
+customers,null_check,customer_city,0,99441,WARNING,,0.0,PASS
+customers,null_check,customer_state,0,99441,WARNING,,0.0,PASS
+customers,duplicate_full_row,*,0,99441,WARNING,,0.0,PASS
+customers,duplicate_primary_key,customer_id,0,99441,ERROR,,0.0,PASS
+geolocation,null_check,geolocation_zip_code_prefix,0,1000163,WARNING,,0.0,PASS
+geolocation,null_check,geolocation_lat,0,1000163,WARNING,,0.0,PASS
+geolocation,null_check,geolocation_lng,0,1000163,WARNING,,0.0,PASS
+geolocation,null_check,geolocation_city,0,1000163,WARNING,,0.0,PASS
+geolocation,null_check,geolocation_state,0,1000163,WARNING,,0.0,PASS
+geolocation,duplicate_full_row,*,261831,1000163,WARNING,,26.1788,WARN
+order_items,null_check,order_id,0,112650,ERROR,,0.0,PASS
+order_items,null_check,order_item_id,0,112650,ERROR,,0.0,PASS
+order_items,null_check,product_id,0,112650,ERROR,,0.0,PASS
+order_items,null_check,seller_id,0,112650,ERROR,,0.0,PASS
+order_items,null_check,shipping_limit_date,0,112650,WARNING,,0.0,PASS
+order_items,null_check,price,0,112650,WARNING,,0.0,PASS
+order_items,null_check,freight_value,0,112650,WARNING,,0.0,PASS
+order_items,duplicate_full_row,*,0,112650,WARNING,,0.0,PASS
+order_items,duplicate_primary_key,"order_id,order_item_id",0,112650,ERROR,,0.0,PASS
+orders,null_check,order_id,0,99441,ERROR,,0.0,PASS
+orders,null_check,customer_id,0,99441,ERROR,,0.0,PASS
+orders,null_check,order_status,0,99441,WARNING,,0.0,PASS
+orders,null_check,order_purchase_timestamp,0,99441,WARNING,,0.0,PASS
+orders,null_check,order_approved_at,160,99441,INFO,,0.1609,NOTE
+orders,null_check,order_delivered_carrier_date,1783,99441,INFO,,1.793,NOTE
+orders,null_check,order_delivered_customer_date,2965,99441,INFO,,2.9817,NOTE
+orders,null_check,order_estimated_delivery_date,0,99441,WARNING,,0.0,PASS
+orders,duplicate_full_row,*,0,99441,WARNING,,0.0,PASS
+orders,duplicate_primary_key,order_id,0,99441,ERROR,,0.0,PASS
+payments,null_check,order_id,0,103886,ERROR,,0.0,PASS
+payments,null_check,payment_sequential,0,103886,ERROR,,0.0,PASS
+payments,null_check,payment_type,0,103886,WARNING,,0.0,PASS
+payments,null_check,payment_installments,0,103886,WARNING,,0.0,PASS
+payments,null_check,payment_value,0,103886,WARNING,,0.0,PASS
+payments,duplicate_full_row,*,0,103886,WARNING,,0.0,PASS
+payments,duplicate_primary_key,"order_id,payment_sequential",0,103886,ERROR,,0.0,PASS
+products,null_check,product_id,0,32951,ERROR,,0.0,PASS
+products,null_check,product_category_name,610,32951,WARNING,,1.8512,WARN
+products,null_check,product_name_lenght,610,32951,WARNING,,1.8512,WARN
+products,null_check,product_description_lenght,610,32951,WARNING,,1.8512,WARN
+products,null_check,product_photos_qty,610,32951,WARNING,,1.8512,WARN
+products,null_check,product_weight_g,2,32951,WARNING,,0.0061,WARN
+products,null_check,product_length_cm,2,32951,WARNING,,0.0061,WARN
+products,null_check,product_height_cm,2,32951,WARNING,,0.0061,WARN
+products,null_check,product_width_cm,2,32951,WARNING,,0.0061,WARN
+products,duplicate_full_row,*,0,32951,WARNING,,0.0,PASS
+products,duplicate_primary_key,product_id,0,32951,ERROR,,0.0,PASS
+reviews,null_check,review_id,0,99224,ERROR,,0.0,PASS
+reviews,null_check,order_id,0,99224,ERROR,,0.0,PASS
+reviews,null_check,review_score,0,99224,WARNING,,0.0,PASS
+reviews,null_check,review_comment_title,87656,99224,INFO,,88.3415,NOTE
+reviews,null_check,review_comment_message,58247,99224,INFO,,58.7025,NOTE
+reviews,null_check,review_creation_date,0,99224,WARNING,,0.0,PASS
+reviews,null_check,review_answer_timestamp,0,99224,WARNING,,0.0,PASS
+reviews,duplicate_full_row,*,0,99224,WARNING,,0.0,PASS
+reviews,duplicate_primary_key,"review_id,order_id",0,99224,ERROR,,0.0,PASS
+sellers,null_check,seller_id,0,3095,ERROR,,0.0,PASS
+sellers,null_check,seller_zip_code_prefix,0,3095,WARNING,,0.0,PASS
+sellers,null_check,seller_city,0,3095,WARNING,,0.0,PASS
+sellers,null_check,seller_state,0,3095,WARNING,,0.0,PASS
+sellers,duplicate_full_row,*,0,3095,WARNING,,0.0,PASS
+sellers,duplicate_primary_key,seller_id,0,3095,ERROR,,0.0,PASS
+orders,referential_integrity,customer_id,0,99441,ERROR,orders.customer_id -> customers.customer_id,0.0,PASS
+order_items,referential_integrity,order_id,0,112650,ERROR,order_items.order_id -> orders.order_id,0.0,PASS
+order_items,referential_integrity,product_id,0,112650,ERROR,order_items.product_id -> products.product_id,0.0,PASS
+order_items,referential_integrity,seller_id,0,112650,ERROR,order_items.seller_id -> sellers.seller_id,0.0,PASS
+payments,referential_integrity,order_id,0,103886,ERROR,payments.order_id -> orders.order_id,0.0,PASS
+reviews,referential_integrity,order_id,0,99224,ERROR,reviews.order_id -> orders.order_id,0.0,PASS
+orders,orders_without_items,order_id,775,99441,WARNING,Orders with no order_items rows (mostly canceled/unavailable).,0.7794,WARN
+orders,orders_without_payments,order_id,1,99441,WARNING,,0.001,WARN
+products,category_without_translation,product_category_name,13,32951,WARNING,"pc_gamer, portateis_cozinha_e_preparadores_de_alimentos",0.0395,WARN
+customers,zip_not_in_geolocation,customer_zip_code_prefix,278,99441,INFO,,0.2796,NOTE
+sellers,zip_not_in_geolocation,seller_zip_code_prefix,7,3095,INFO,,0.2262,NOTE
+orders,approved_before_purchase,order_approved_at,0,99441,WARNING,,0.0,PASS
+orders,carrier_before_purchase,order_delivered_carrier_date,166,99441,WARNING,,0.1669,WARN
+orders,delivered_before_purchase,order_delivered_customer_date,0,99441,WARNING,,0.0,PASS
+orders,delivered_status_missing_delivery_date,order_delivered_customer_date,8,99441,WARNING,,0.008,WARN
+orders,delivery_date_on_non_delivered,order_delivered_customer_date,6,99441,INFO,,0.006,NOTE
+order_items,shipping_limit_after_2018,shipping_limit_date,4,112650,WARNING,Shipping deadline far beyond the dataset period (likely data-entry error).,0.0036,WARN
+order_items,non_positive_price,price,0,112650,ERROR,,0.0,PASS
+order_items,negative_freight,freight_value,0,112650,ERROR,,0.0,PASS
+payments,zero_payment_value,payment_value,9,103886,WARNING,,0.0087,WARN
+payments,zero_installments,payment_installments,2,103886,WARNING,,0.0019,WARN
+payments,payment_type_not_defined,payment_type,3,103886,WARNING,,0.0029,WARN
+reviews,score_out_of_range,review_score,0,99224,ERROR,,0.0,PASS
+reviews,duplicate_review_id_across_orders,review_id,814,99224,INFO,"Same survey id covers several orders; grain is (review_id, order_id).",0.8204,NOTE
+reviews,order_with_multiple_reviews,order_id,551,99224,INFO,,0.5553,NOTE
+customers,invalid_state,customer_state,0,99441,ERROR,,0.0,PASS
+sellers,invalid_state,seller_state,0,3095,ERROR,,0.0,PASS
+geolocation,coordinates_outside_brazil,geolocation_lat/lng,31,1000163,WARNING,,0.0031,WARN
+products,missing_dimensions,product_weight_g,2,32951,WARNING,,0.0061,WARN
+products,zero_weight,product_weight_g,4,32951,WARNING,,0.0121,WARN
+customers,zip_not_5_digits,customer_zip_code_prefix,0,99441,ERROR,,0.0,PASS

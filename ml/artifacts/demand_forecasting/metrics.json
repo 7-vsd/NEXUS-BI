@@ -1,0 +1,58 @@
+{
+  "categories": [
+    "auto",
+    "bed_bath_table",
+    "computers_accessories",
+    "furniture_decor",
+    "garden_tools",
+    "health_beauty",
+    "housewares",
+    "sports_leisure",
+    "telephony",
+    "watches_gifts"
+  ],
+  "horizon_weeks": 4,
+  "folds": 4,
+  "best_model_by_wape": "naive",
+  "backtest_overall": {
+    "moving_avg_4w": {
+      "mae": 30.884375,
+      "rmse": 39.448443410355246,
+      "mape_pct": 31.935090170223635,
+      "smape_pct": 29.053112527061923,
+      "wape_pct": 26.82390619910976,
+      "bias": -4.70625,
+      "n": 160
+    },
+    "naive": {
+      "mae": 29.625,
+      "rmse": 39.10450741282902,
+      "mape_pct": 28.89296393987573,
+      "smape_pct": 28.060353993316856,
+      "wape_pct": 25.730105308869827,
+      "bias": -9.1625,
+      "n": 160
+    },
+    "seasonal_naive_52w": {
+      "mae": 59.0,
+      "rmse": 73.70371428903702,
+      "mape_pct": 47.47862957300968,
+      "smape_pct": 64.4999062672167,
+      "wape_pct": 51.243078927369446,
+      "bias": -55.35,
+      "n": 160
+    },
+    "xgboost": {
+      "mae": 33.62179021835327,
+      "rmse": 44.835802752290824,
+      "mape_pct": 31.763249162740294,
+      "smape_pct": 30.588915252672955,
+      "wape_pct": 29.20142457353449,
+      "bias": -14.877693939208985,
+      "n": 160
+    }
+  },
+  "first_week": "2017-01-09",
+  "last_week": "2018-08-13",
+  "seasonality_note": "Seasonal naive (52w) only covers 2018 target weeks; one seasonal cycle available."
+}

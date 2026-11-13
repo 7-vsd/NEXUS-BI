@@ -1,0 +1,6 @@
+payment_type_label,transactions,payment_value,value_share_pct,avg_installments
+Credit Card,76795,12542084.19,78.34,3.51
+Boleto (Bank Slip),19784,2869361.27,17.92,1.00
+Voucher,5775,379436.87,2.37,1.00
+Debit Card,1529,217989.79,1.36,1.00
+Not Defined,3,0.00,0.00,1.00

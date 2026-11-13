@@ -1,0 +1,55 @@
+/// Field parameter: lets users swap the measure shown in a visual.
+table 'Metric Selector'
+	lineageTag: 287acbb7-0cd6-5d22-a3b5-b2d3632a34a3
+
+	column 'Metric Selector'
+		dataType: string
+		lineageTag: 5269c7dd-fc82-564f-becf-ef6c98b2cca4
+		summarizeBy: none
+		sourceColumn: [Value1]
+		sortByColumn: 'Metric Selector Order'
+
+		relatedColumnDetails
+			groupByColumn: 'Metric Selector Fields'
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Metric Selector Fields'
+		dataType: string
+		isHidden
+		lineageTag: fcd2192a-b3a4-5033-98d8-8e355a05fcdd
+		summarizeBy: none
+		sourceColumn: [Value2]
+		sortByColumn: 'Metric Selector Order'
+
+		extendedProperty ParameterMetadata =
+				{
+				  "version": 3,
+				  "kind": 2
+				}
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Metric Selector Order'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: c5967c5d-4627-5d41-a3af-5c155fa6a6b3
+		summarizeBy: sum
+		sourceColumn: [Value3]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Metric Selector' = calculated
+		mode: import
+		source =
+				{
+				("Total Revenue", NAMEOF('_Measures'[Total Revenue]), 0),
+				("Total Orders", NAMEOF('_Measures'[Total Orders]), 1),
+				("Unique Customers", NAMEOF('_Measures'[Unique Customers]), 2),
+				("Average Order Value", NAMEOF('_Measures'[Average Order Value]), 3),
+				("On-Time Delivery %", NAMEOF('_Measures'[On-Time Delivery %]), 4),
+				("Avg Review Score", NAMEOF('_Measures'[Avg Review Score]), 5)
+				}
+
+	annotation PBI_ResultType = Table

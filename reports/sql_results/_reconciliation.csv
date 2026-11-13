@@ -1,0 +1,21 @@
+check,sql_value,python_value,abs_diff,tolerance,status,detail
+kpi:total_revenue,15735527.03,15735527.03,0.0,15.735527029999998,PASS,
+kpi:product_revenue,13494400.74,13494400.74,0.0,13.49440074,PASS,
+kpi:freight_revenue,2241126.29,2241126.29,0.0,2.24112629,PASS,
+kpi:total_orders,98207.0,98207.0,0.0,0.0,PASS,
+kpi:all_orders,99441.0,99441.0,0.0,0.0,PASS,
+kpi:unique_customers,94990.0,94990.0,0.0,0.0,PASS,
+kpi:average_order_value,160.23,160.23,0.0,0.011,PASS,
+kpi:total_payment_value,16008872.12,16008872.12,0.0,16.00887212,PASS,
+kpi:cancellation_rate,0.006285,0.006285,0.0,0.011,PASS,
+kpi:on_time_delivery_rate,0.932269,0.932269,0.0,0.011,PASS,
+kpi:avg_delivery_days,12.5582,12.5582,0.0,0.011,PASS,
+kpi:avg_review_score,4.0864,4.0864,0.0,0.011,PASS,
+kpi:items_sold,112101.0,112101.0,0.0,0.0,PASS,
+rows:orders,99441.0,99441.0,0.0,0.0,PASS,raw=99441 staging=99441 warehouse=99441
+rows:order_items,112650.0,112650.0,0.0,0.0,PASS,raw=112650 staging=112650 warehouse=112650
+rows:payments,103886.0,103886.0,0.0,0.0,PASS,raw=103886 staging=103886 warehouse=103886
+rows:reviews,99224.0,99224.0,0.0,0.0,PASS,raw=99224 staging=99224 warehouse=99224
+rows:products,32951.0,32951.0,0.0,0.0,PASS,raw=32951 staging=32951 warehouse=32951
+rows:sellers,3095.0,3095.0,0.0,0.0,PASS,raw=3095 staging=3095 warehouse=3095
+rows:customer_ids,99441.0,99441.0,0.0,0.0,PASS,raw=99441 staging=99441 warehouse=99441

@@ -1,0 +1,154 @@
+/// ML: daily KPI anomaly scores and flags.
+table Anomalies
+	lineageTag: a830703a-058d-574a-b35a-b70ed8723784
+
+	column metric_date
+		dataType: dateTime
+		formatString: yyyy-mm-dd
+		lineageTag: 3ce6682b-2ed4-5be2-a2ec-d0929c22607f
+		summarizeBy: none
+		sourceColumn: metric_date
+
+		annotation SummarizationSetBy = Automatic
+
+	column revenue
+		dataType: decimal
+		formatString: #,0.00
+		lineageTag: 6e09e770-0848-5c84-b784-51e13cec6746
+		summarizeBy: sum
+		sourceColumn: revenue
+
+		annotation SummarizationSetBy = Automatic
+
+	column orders
+		dataType: int64
+		formatString: 0
+		lineageTag: 9c6d2e1b-ebe4-5d7f-b145-d5caf8ff8e53
+		summarizeBy: sum
+		sourceColumn: orders
+
+		annotation SummarizationSetBy = Automatic
+
+	column aov
+		dataType: decimal
+		formatString: #,0.00
+		lineageTag: 0e8d9911-560a-5c11-8e6a-1ca3b78c828f
+		summarizeBy: sum
+		sourceColumn: aov
+
+		annotation SummarizationSetBy = Automatic
+
+	column late_rate
+		dataType: double
+		formatString: 0.00
+		lineageTag: c3492b99-114d-549e-b73f-08040612a654
+		summarizeBy: sum
+		sourceColumn: late_rate
+
+		annotation SummarizationSetBy = Automatic
+
+	column avg_review
+		dataType: double
+		formatString: 0.00
+		lineageTag: e641d3b7-5467-5574-a730-a06889c06d95
+		summarizeBy: sum
+		sourceColumn: avg_review
+
+		annotation SummarizationSetBy = Automatic
+
+	column iforest_score
+		dataType: double
+		formatString: 0.00
+		lineageTag: 83bb0c05-b62a-5b48-93a8-ef9c24612d63
+		summarizeBy: none
+		sourceColumn: iforest_score
+
+		annotation SummarizationSetBy = Automatic
+
+	column iforest_flag
+		dataType: boolean
+		lineageTag: 3998cf24-22e3-5e4c-b23b-f6fd76d0ff6a
+		summarizeBy: none
+		sourceColumn: iforest_flag
+
+		annotation SummarizationSetBy = Automatic
+
+	column rolling_z
+		dataType: double
+		formatString: 0.00
+		lineageTag: ea976c6d-8e13-5ea3-90df-93f16fc659e8
+		summarizeBy: sum
+		sourceColumn: rolling_z
+
+		annotation SummarizationSetBy = Automatic
+
+	column rolling_flag
+		dataType: boolean
+		lineageTag: 52e6dc09-febb-5f32-9d98-cafd181096a7
+		summarizeBy: none
+		sourceColumn: rolling_flag
+
+		annotation SummarizationSetBy = Automatic
+
+	column global_z
+		dataType: double
+		formatString: 0.00
+		lineageTag: c7a47387-6530-5de8-9e3c-c34751e6e19c
+		summarizeBy: sum
+		sourceColumn: global_z
+
+		annotation SummarizationSetBy = Automatic
+
+	column zscore_flag
+		dataType: boolean
+		lineageTag: 41ce1294-b242-57e6-8b3b-59e0564800e6
+		summarizeBy: none
+		sourceColumn: zscore_flag
+
+		annotation SummarizationSetBy = Automatic
+
+	column votes
+		dataType: int64
+		formatString: 0
+		lineageTag: a7c3088e-5b3f-5daa-a702-a1e64b829756
+		summarizeBy: sum
+		sourceColumn: votes
+
+		annotation SummarizationSetBy = Automatic
+
+	column is_anomaly
+		dataType: boolean
+		lineageTag: a698516b-9962-5015-a0b4-af3d576e67b3
+		summarizeBy: none
+		sourceColumn: is_anomaly
+
+		annotation SummarizationSetBy = Automatic
+
+	column severity
+		dataType: string
+		lineageTag: d64157e3-ab79-5f4a-b40f-88a2cee8eefb
+		summarizeBy: none
+		sourceColumn: severity
+
+		annotation SummarizationSetBy = Automatic
+
+	column direction
+		dataType: string
+		lineageTag: 0c5227f9-338f-503a-8081-429837f009e1
+		summarizeBy: none
+		sourceColumn: direction
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Anomalies = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents(DataFolder & "\anomalies.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    Promoted = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
+				    Selected = Table.SelectColumns(Promoted, {"metric_date", "revenue", "orders", "aov", "late_rate", "avg_review", "iforest_score", "iforest_flag", "rolling_z", "rolling_flag", "global_z", "zscore_flag", "votes", "is_anomaly", "severity", "direction"}),
+				    Typed = Table.TransformColumnTypes(Selected, {{"metric_date", type date}, {"revenue", Currency.Type}, {"orders", Int64.Type}, {"aov", Currency.Type}, {"late_rate", type number}, {"avg_review", type number}, {"iforest_score", type number}, {"iforest_flag", type logical}, {"rolling_z", type number}, {"rolling_flag", type logical}, {"global_z", type number}, {"zscore_flag", type logical}, {"votes", Int64.Type}, {"is_anomaly", type logical}, {"severity", type text}, {"direction", type text}}, "en-US")
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table

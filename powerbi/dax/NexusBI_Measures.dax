@@ -1,0 +1,330 @@
+// NEXUS BI – DAX measure library (generated from powerbi/dax/measures.py)
+// Home table: _Measures
+
+// 1 Revenue | Item price + freight of orders not canceled/unavailable (BRL). | format: R$ #,0
+[Total Revenue] :=
+SUM ( FactOrders[revenue] )
+
+// 1 Revenue | Item price only, revenue orders. | format: R$ #,0
+[Product Revenue] :=
+CALCULATE ( SUM ( FactOrders[items_price] ), FactOrders[is_revenue_order] = TRUE () )
+
+// 1 Revenue | Freight charged, revenue orders. | format: R$ #,0
+[Freight Revenue] :=
+CALCULATE ( SUM ( FactOrders[freight_value] ), FactOrders[is_revenue_order] = TRUE () )
+
+// 1 Revenue | Item-grain revenue for product/seller analysis (no fan-out). | format: R$ #,0
+[Item Revenue] :=
+CALCULATE ( SUM ( FactOrderItems[price] ), FactOrderItems[is_revenue_order] = TRUE () )
+
+// 1 Revenue | Sum of payment transactions. | format: R$ #,0
+[Total Payment Value] :=
+SUM ( FactPayments[payment_value] )
+
+// 2 Time Intelligence | Revenue in the same period of the previous year. | format: R$ #,0
+[Revenue PY] :=
+CALCULATE ( [Total Revenue], SAMEPERIODLASTYEAR ( DimDate[full_date] ) )
+
+// 2 Time Intelligence | Year-over-year revenue growth. | format: 0.0%
+[Revenue YoY %] :=
+DIVIDE ( [Total Revenue] - [Revenue PY], [Revenue PY] )
+
+// 2 Time Intelligence | Revenue in the previous month. | format: R$ #,0
+[Revenue PM] :=
+CALCULATE ( [Total Revenue], DATEADD ( DimDate[full_date], -1, MONTH ) )
+
+// 2 Time Intelligence | Month-over-month growth. | format: 0.0%
+[Revenue MoM %] :=
+DIVIDE ( [Total Revenue] - [Revenue PM], [Revenue PM] )
+
+// 2 Time Intelligence | Year-to-date revenue. | format: R$ #,0
+[Revenue YTD] :=
+TOTALYTD ( [Total Revenue], DimDate[full_date] )
+
+// 2 Time Intelligence | Quarter-to-date revenue. | format: R$ #,0
+[Revenue QTD] :=
+TOTALQTD ( [Total Revenue], DimDate[full_date] )
+
+// 2 Time Intelligence | Revenue in the 30 days ending at the latest date in context. | format: R$ #,0
+[Revenue Rolling 30D] :=
+CALCULATE ( [Total Revenue], DATESINPERIOD ( DimDate[full_date], MAX ( DimDate[full_date] ), -30, DAY ) )
+
+// 2 Time Intelligence | Cumulative revenue (CALCULATE + FILTER + ALL). | format: R$ #,0
+[Revenue Running Total] :=
+CALCULATE ( [Total Revenue], FILTER ( ALL ( DimDate[full_date] ), DimDate[full_date] <= MAX ( DimDate[full_date] ) ) )
+
+// 1 Revenue | Average revenue per calendar day in context (AVERAGEX). | format: R$ #,0
+[Avg Daily Revenue] :=
+AVERAGEX ( VALUES ( DimDate[full_date] ), [Total Revenue] )
+
+// 3 Orders | Revenue-recognised orders. | format: #,0
+[Total Orders] :=
+CALCULATE ( COUNTROWS ( FactOrders ), FactOrders[is_revenue_order] = TRUE () )
+
+// 3 Orders | All orders, any status. | format: #,0
+[All Orders] :=
+COUNTROWS ( FactOrders )
+
+// 3 Orders | Revenue / orders. | format: R$ #,0.00
+[Average Order Value] :=
+DIVIDE ( [Total Revenue], [Total Orders] )
+
+// 3 Orders | Order lines of revenue orders. | format: #,0
+[Items Sold] :=
+CALCULATE ( COUNTROWS ( FactOrderItems ), FactOrderItems[is_revenue_order] = TRUE () )
+
+// 3 Orders | Average basket size. | format: 0.00
+[Items per Order] :=
+DIVIDE ( [Items Sold], [Total Orders] )
+
+// 4 Customers | Distinct real customers with a revenue order. FILTER over the fact TABLE (expanded table) restricts DimCustomer; a plain column predicate on FactOrders would not. | format: #,0
+[Unique Customers] :=
+CALCULATE ( DISTINCTCOUNT ( DimCustomer[customer_unique_id] ), FILTER ( FactOrders, FactOrders[is_revenue_order] = TRUE () ) )
+
+// 4 Customers | Customers with more than one revenue order (FILTER over customers). | format: #,0
+[Repeat Customers] :=
+COUNTROWS ( FILTER ( VALUES ( DimCustomer[customer_unique_id] ), CALCULATE ( COUNTROWS ( FactOrders ), FactOrders[is_revenue_order] = TRUE (), FactOrders[items_count] > 0 ) > 1 ) )
+
+// 4 Customers | Share of customers who ordered more than once. | format: 0.00%
+[Repeat Customer Rate] :=
+DIVIDE ( [Repeat Customers], [Unique Customers] )
+
+// 4 Customers | Average customer value. | format: R$ #,0.00
+[Revenue per Customer] :=
+DIVIDE ( [Total Revenue], [Unique Customers] )
+
+// 4 Customers | Historical CLV estimate = AOV x orders per customer. | format: R$ #,0.00
+[Estimated CLV] :=
+[Average Order Value] * DIVIDE ( [Total Orders], [Unique Customers] )
+
+// 4 Customers | Rank of the state by revenue (RANKX over ALL states). | format: #,0
+[Customer Revenue Rank] :=
+IF ( HASONEVALUE ( DimCustomer[state] ), RANKX ( ALL ( DimCustomer[state] ), [Total Revenue], , DESC, DENSE ) )
+
+// 4 Customers | Share of total revenue (ALL removes customer filters). | format: 0.0%
+[Share of Revenue] :=
+DIVIDE ( [Total Revenue], CALCULATE ( [Total Revenue], ALL ( DimCustomer ) ) )
+
+// 4 Customers | Share within the customer's region (ALLEXCEPT keeps region filter). | format: 0.0%
+[Share of Region Revenue] :=
+DIVIDE ( [Total Revenue], CALCULATE ( [Total Revenue], ALLEXCEPT ( DimCustomer, DimCustomer[region] ) ) )
+
+// 4 Customers | Customers buying in the period (cohort matrix value). | format: #,0
+[Active Customers] :=
+CALCULATE ( DISTINCTCOUNT ( DimCustomer[customer_unique_id] ), FILTER ( FactOrders, FactOrders[is_revenue_order] = TRUE () ) )
+
+// 5 Operations | Orders delivered to the customer. | format: #,0
+[Delivered Orders] :=
+CALCULATE ( COUNTROWS ( FactOrders ), FactOrders[is_delivered] = TRUE () )
+
+// 5 Operations | Delivered after the estimated date. | format: #,0
+[Late Orders] :=
+CALCULATE ( COUNTROWS ( FactOrders ), FactOrders[is_late] = TRUE () )
+
+// 5 Operations | Delivered on or before the estimate / delivered orders. | format: 0.0%
+[On-Time Delivery %] :=
+DIVIDE ( CALCULATE ( COUNTROWS ( FactOrders ), FactOrders[is_on_time] = TRUE () ), [Delivered Orders] )
+
+// 5 Operations | Late / delivered orders. | format: 0.0%
+[Late Delivery %] :=
+DIVIDE ( [Late Orders], [Delivered Orders] )
+
+// 5 Operations | Purchase to delivery, days. | format: 0.0
+[Avg Delivery Days] :=
+CALCULATE ( AVERAGE ( FactOrders[delivery_days] ), FactOrders[is_delivered] = TRUE () )
+
+// 5 Operations | Average days late for late orders (AVERAGEX over FILTER). | format: 0.0
+[Avg Delay of Late Orders] :=
+AVERAGEX ( FILTER ( FactOrders, FactOrders[is_late] = TRUE () ), FactOrders[delivery_delay_days] )
+
+// 5 Operations | Delivered orders counted on the delivery date (inactive relationship). | format: #,0
+[Deliveries by Delivery Date] :=
+CALCULATE ( [Delivered Orders], USERELATIONSHIP ( FactOrders[delivered_date_key], DimDate[date_key] ) )
+
+// 5 Operations | Orders with status canceled. | format: #,0
+[Canceled Orders] :=
+CALCULATE ( COUNTROWS ( FactOrders ), FactOrders[is_canceled] = TRUE () )
+
+// 5 Operations | Canceled / all orders. | format: 0.00%
+[Cancellation Rate] :=
+DIVIDE ( [Canceled Orders], [All Orders] )
+
+// 5 Operations | Freight as share of item price (SUMX). | format: 0.0%
+[Freight Ratio] :=
+DIVIDE ( SUMX ( FactOrderItems, FactOrderItems[freight_value] ), SUMX ( FactOrderItems, FactOrderItems[price] ) )
+
+// 6 Reviews | Latest review per order (1-5). | format: 0.00
+[Avg Review Score] :=
+AVERAGE ( FactOrders[review_score] )
+
+// 6 Reviews | Review responses. | format: #,0
+[Review Count] :=
+COUNTROWS ( FactReviews )
+
+// 6 Reviews | Share of 1-star reviews. | format: 0.0%
+[1-Star Share] :=
+DIVIDE ( CALCULATE ( COUNTROWS ( FactReviews ), FactReviews[review_score] = 1 ), [Review Count] )
+
+// 7 Sellers | Seller rank by item revenue. | format: #,0
+[Seller Revenue Rank] :=
+IF ( HASONEVALUE ( DimSeller[seller_id] ), RANKX ( ALL ( DimSeller[seller_id] ), [Item Revenue], , DESC, DENSE ) )
+
+// 7 Sellers | Orders containing the seller's items. | format: #,0
+[Seller Orders] :=
+CALCULATE ( DISTINCTCOUNT ( FactOrderItems[order_id] ), FactOrderItems[is_revenue_order] = TRUE () )
+
+// 7 Sellers | Review score of the orders containing the seller's items (TREATAS bridges items -> orders). | format: 0.00
+[Seller Avg Review] :=
+CALCULATE ( [Avg Review Score], TREATAS ( VALUES ( FactOrderItems[order_id] ), FactOrders[order_id] ) )
+
+// 7 Sellers | On-time rate of the seller's orders. | format: 0.0%
+[Seller On-Time %] :=
+CALCULATE ( [On-Time Delivery %], TREATAS ( VALUES ( FactOrderItems[order_id] ), FactOrders[order_id] ) )
+
+// 7 Sellers | Sellers with sales in context. | format: #,0
+[Active Sellers] :=
+CALCULATE ( DISTINCTCOUNT ( FactOrderItems[seller_key] ), FactOrderItems[is_revenue_order] = TRUE () )
+
+// 8 Predictive | Predicted daily revenue (selected model). | format: R$ #,0
+[Forecast Revenue] :=
+SUM ( RevenueForecast[predicted] )
+
+// 8 Predictive | Lower 95% bound. | format: R$ #,0
+[Forecast Lower 95] :=
+SUM ( RevenueForecast[lower_95] )
+
+// 8 Predictive | Upper 95% bound. | format: R$ #,0
+[Forecast Upper 95] :=
+SUM ( RevenueForecast[upper_95] )
+
+// 8 Predictive | Actual revenue in backtest windows. | format: R$ #,0
+[Backtest Actual] :=
+SUM ( RevenueForecast[actual] )
+
+// 8 Predictive | Sum of absolute backtest errors. | format: R$ #,0
+[Forecast Abs Error] :=
+SUMX ( FILTER ( RevenueForecast, NOT ISBLANK ( RevenueForecast[actual] ) ), ABS ( RevenueForecast[predicted] - RevenueForecast[actual] ) )
+
+// 8 Predictive | Mean absolute % error on backtest rows. | format: 0.0%
+[Forecast MAPE] :=
+AVERAGEX ( FILTER ( RevenueForecast, RevenueForecast[actual] > 0 ), ABS ( RevenueForecast[predicted] - RevenueForecast[actual] ) / RevenueForecast[actual] )
+
+// 8 Predictive | Predicted weekly units. | format: #,0.0
+[Demand Forecast Units] :=
+SUM ( DemandForecast[predicted] )
+
+// 8 Predictive | Actual weekly units (backtest). | format: #,0
+[Demand Actual Units] :=
+SUM ( DemandForecast[actual] )
+
+// 8 Predictive | Mean P(no purchase in 180 d). | format: 0.0%
+[Avg Churn Probability] :=
+AVERAGE ( ChurnScores[churn_probability] )
+
+// 8 Predictive | Customers in High / Very High churn bands. | format: #,0
+[High Risk Customers] :=
+CALCULATE ( COUNTROWS ( ChurnScores ), ChurnScores[risk_band] IN { "High", "Very High" } )
+
+// 8 Predictive | Customers in segment. | format: #,0
+[Segment Customers] :=
+COUNTROWS ( CustomerSegments )
+
+// 8 Predictive | Customers with a churn score. | format: #,0
+[Scored Customers] :=
+COUNTROWS ( ChurnScores )
+
+// 8 Predictive | Revenue on anomaly days (blank otherwise, so tables list only anomalies). | format: R$ #,0
+[Anomaly Revenue] :=
+CALCULATE ( SUM ( Anomalies[revenue] ), Anomalies[is_anomaly] = TRUE () )
+
+// 8 Predictive | Days flagged by >= 2 detectors. | format: #,0
+[Anomaly Days] :=
+CALCULATE ( COUNTROWS ( Anomalies ), Anomalies[is_anomaly] = TRUE () )
+
+// 9 Dynamic | Dynamic measure driven by the KPI Selector slicer (SWITCH). | format: #,0.00
+[Selected KPI Value] :=
+SWITCH ( SELECTEDVALUE ( 'KPI Selector'[KPI], "Revenue" ),
+    "Revenue", [Total Revenue],
+    "Orders", [Total Orders],
+    "Customers", [Unique Customers],
+    "Average Order Value", [Average Order Value],
+    "On-Time Delivery %", [On-Time Delivery %],
+    "Avg Review Score", [Avg Review Score]
+)
+
+// 9 Dynamic | Dynamic chart title.
+[Selected KPI Title] :=
+"Trend: " & SELECTEDVALUE ( 'KPI Selector'[KPI], "Revenue" )
+
+// 9 Dynamic | Conditional-formatting colour for on-time %.
+[Color On-Time] :=
+IF ( [On-Time Delivery %] >= 0.9, "#16A34A", IF ( [On-Time Delivery %] >= 0.85, "#D97706", "#DC2626" ) )
+
+// 9 Dynamic | Conditional-formatting colour for growth.
+[Color Growth] :=
+IF ( ISBLANK ( [Revenue YoY %] ), "#94A3B8", IF ( [Revenue YoY %] >= 0, "#16A34A", "#DC2626" ) )
+
+// 9 Dynamic | Gauge minimum. | format: 0
+[Gauge Min] :=
+0
+
+// 9 Dynamic | Gauge maximum for percentages. | format: 0.0%
+[Gauge Max %] :=
+1
+
+// 9 Dynamic | On-time delivery target (management threshold). | format: 0.0%
+[Target On-Time %] :=
+0.9
+
+// 9 Dynamic | Gauge maximum for review score. | format: 0.00
+[Gauge Max Review] :=
+5
+
+// 9 Dynamic | Review score target. | format: 0.00
+[Target Review] :=
+4
+
+// 9 Dynamic | Heat colour: share of the top state's revenue.
+[Color State Revenue] :=
+VAR s = DIVIDE ( [Total Revenue], MAXX ( ALLSELECTED ( DimCustomer[state] ), [Total Revenue] ) )
+RETURN SWITCH ( TRUE (), s >= 0.5, "#1E3A8A", s >= 0.2, "#1D4ED8", s >= 0.08, "#3B82F6", s >= 0.03, "#60A5FA", "#93C5FD" )
+
+// 9 Dynamic | Traffic-light colour for late-delivery rate.
+[Color State Late] :=
+SWITCH ( TRUE (), [Late Delivery %] >= 0.15, "#DC2626", [Late Delivery %] >= 0.10, "#F97316", [Late Delivery %] >= 0.07, "#EAB308", "#16A34A" )
+
+// 9 Dynamic | Red → green by review score.
+[Color Review Score] :=
+SWITCH ( SELECTEDVALUE ( FactReviews[review_score] ), 1, "#DC2626", 2, "#F97316", 3, "#EAB308", 4, "#84CC16", 5, "#16A34A", "#94A3B8" )
+
+// 9 Dynamic | Colour by churn risk band.
+[Color Risk Band] :=
+SWITCH ( SELECTEDVALUE ( ChurnScores[risk_band] ), "Very High", "#DC2626", "High", "#F97316", "Medium", "#EAB308", "#94A3B8" )
+
+// 9 Dynamic | Fixed colour per RFM segment.
+[Color RFM Segment] :=
+SWITCH ( SELECTEDVALUE ( CustomerSegments[rfm_segment] ), "Champions", "#16A34A", "Loyal - Lapsing", "#0D9488", "New High-Value", "#4F46E5", "New Low-Value", "#0284C7", "Needs Attention", "#D97706", "At Risk - High Value", "#DB2777", "Hibernating", "#64748B", "#94A3B8" )
+
+// 9 Dynamic | Heat-map colour for the cohort matrix.
+[Color Cohort Heat] :=
+SWITCH ( TRUE (), [Active Customers] >= 3000, "#0F766E", [Active Customers] >= 1000, "#14B8A6", [Active Customers] >= 100, "#5EEAD4", [Active Customers] >= 10, "#99F6E4", [Active Customers] >= 1, "#CCFBF1", BLANK () )
+
+// 9 Dynamic | Traffic-light colour for seller on-time rate.
+[Color Seller On-Time] :=
+IF ( [Seller On-Time %] >= 0.9, "#16A34A", IF ( [Seller On-Time %] >= 0.85, "#D97706", "#DC2626" ) )
+
+// 9 Dynamic | Alert red.
+[Color Alert] :=
+"#DC2626"
+
+// 9 Dynamic | Report footer text.
+[Data Freshness] :=
+"Data through " & FORMAT ( CALCULATE ( MAX ( FactOrders[purchase_timestamp] ), ALL ( FactOrders ) ), "yyyy-mm-dd" )
+
+// Z Simulated (not real data) | SIMULATED – synthetic unit costs; not a real finding. | format: 0.0%
+[SIMULATED Gross Margin %] :=
+DIVIDE ( SUM ( SynCategoryMargin[simulated_gross_margin] ), SUM ( SynCategoryMargin[revenue] ) )
+
+// Z Simulated (not real data) | SIMULATED – synthetic inventory model. | format: #,0
+[SIMULATED Stockout Weeks] :=
+CALCULATE ( COUNTROWS ( SynInventoryWeekly ), SynInventoryWeekly[is_stockout] = TRUE () )

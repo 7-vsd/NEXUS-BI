@@ -1,0 +1,269 @@
+/// Grain: one row per order.
+table FactOrders
+	lineageTag: 9a6c4d78-d70a-57ec-96ff-0fd744d85508
+
+	column order_id
+		dataType: string
+		lineageTag: 7a6950ba-65e3-568a-bb49-76efaac0b76a
+		summarizeBy: none
+		sourceColumn: order_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column customer_key
+		dataType: int64
+		formatString: 0
+		isHidden
+		lineageTag: e66eac4e-5430-5b5f-a068-fe7e02bebe9d
+		summarizeBy: none
+		sourceColumn: customer_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column customer_location_key
+		dataType: int64
+		formatString: 0
+		isHidden
+		lineageTag: db1734e8-3c2b-54d7-8c0d-28be86575dd2
+		summarizeBy: none
+		sourceColumn: customer_location_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column purchase_date_key
+		dataType: int64
+		formatString: 0
+		isHidden
+		lineageTag: c7dff213-5023-59c7-9a1b-b8499ddcb848
+		summarizeBy: none
+		sourceColumn: purchase_date_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column approved_date_key
+		dataType: int64
+		formatString: 0
+		isHidden
+		lineageTag: dac7cb14-3736-5173-8aab-7dc13baf5a2f
+		summarizeBy: none
+		sourceColumn: approved_date_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column delivered_date_key
+		dataType: int64
+		formatString: 0
+		isHidden
+		lineageTag: 44b2a20a-d6c3-5547-9aa2-00acf388e342
+		summarizeBy: none
+		sourceColumn: delivered_date_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column estimated_date_key
+		dataType: int64
+		formatString: 0
+		isHidden
+		lineageTag: 97112649-19b0-5f47-95ab-490f0913abe5
+		summarizeBy: none
+		sourceColumn: estimated_date_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column main_payment_type_key
+		dataType: int64
+		formatString: 0
+		isHidden
+		lineageTag: bbb17164-78c6-5c11-800a-38d551025272
+		summarizeBy: none
+		sourceColumn: main_payment_type_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column order_status
+		dataType: string
+		lineageTag: 51d9c9c8-868a-5423-90a3-ea12e44c96d5
+		summarizeBy: none
+		sourceColumn: order_status
+
+		annotation SummarizationSetBy = Automatic
+
+	column purchase_timestamp
+		dataType: dateTime
+		formatString: yyyy-mm-dd hh:nn:ss
+		lineageTag: 709af71b-3cba-5aba-856e-775bdef7c430
+		summarizeBy: none
+		sourceColumn: purchase_timestamp
+
+		annotation SummarizationSetBy = Automatic
+
+	column is_revenue_order
+		dataType: boolean
+		lineageTag: 1d9b82c4-1021-577c-8e68-2f0148be44b5
+		summarizeBy: none
+		sourceColumn: is_revenue_order
+
+		annotation SummarizationSetBy = Automatic
+
+	column is_canceled
+		dataType: boolean
+		lineageTag: 1030b6ea-09c1-567e-b3f3-339c2065e2a8
+		summarizeBy: none
+		sourceColumn: is_canceled
+
+		annotation SummarizationSetBy = Automatic
+
+	column is_delivered
+		dataType: boolean
+		lineageTag: ff33a582-ad0b-5f07-9d8c-9e79ab395a42
+		summarizeBy: none
+		sourceColumn: is_delivered
+
+		annotation SummarizationSetBy = Automatic
+
+	column is_on_time
+		dataType: boolean
+		lineageTag: c0a6d361-407f-53d0-91ca-650f44c5737e
+		summarizeBy: none
+		sourceColumn: is_on_time
+
+		annotation SummarizationSetBy = Automatic
+
+	column is_late
+		dataType: boolean
+		lineageTag: cf81e10a-b0a3-5a55-b057-89372f122121
+		summarizeBy: none
+		sourceColumn: is_late
+
+		annotation SummarizationSetBy = Automatic
+
+	column items_count
+		dataType: int64
+		formatString: 0
+		lineageTag: c2087b32-3274-564f-b169-db7a0d9ce884
+		summarizeBy: sum
+		sourceColumn: items_count
+
+		annotation SummarizationSetBy = Automatic
+
+	column distinct_sellers
+		dataType: int64
+		formatString: 0
+		lineageTag: de4a9809-cdfd-5a2b-960f-bb36408cccbc
+		summarizeBy: sum
+		sourceColumn: distinct_sellers
+
+		annotation SummarizationSetBy = Automatic
+
+	column items_price
+		dataType: decimal
+		formatString: #,0.00
+		lineageTag: 736c763f-d9e1-5c73-a548-b56b08a28556
+		summarizeBy: sum
+		sourceColumn: items_price
+
+		annotation SummarizationSetBy = Automatic
+
+	column freight_value
+		dataType: decimal
+		formatString: #,0.00
+		lineageTag: f937e5d3-5d1e-5313-8e21-1854b4618683
+		summarizeBy: sum
+		sourceColumn: freight_value
+
+		annotation SummarizationSetBy = Automatic
+
+	column order_value
+		dataType: decimal
+		formatString: #,0.00
+		lineageTag: f14e9c46-d5f9-58cd-887f-8fb6cd64509e
+		summarizeBy: sum
+		sourceColumn: order_value
+
+		annotation SummarizationSetBy = Automatic
+
+	column revenue
+		dataType: decimal
+		formatString: #,0.00
+		lineageTag: d726d397-a15f-569c-ada1-0391d0d97785
+		summarizeBy: sum
+		sourceColumn: revenue
+
+		annotation SummarizationSetBy = Automatic
+
+	column payment_value
+		dataType: decimal
+		formatString: #,0.00
+		lineageTag: 698cff62-220a-5557-9768-070633b13d75
+		summarizeBy: sum
+		sourceColumn: payment_value
+
+		annotation SummarizationSetBy = Automatic
+
+	column payment_count
+		dataType: int64
+		formatString: 0
+		lineageTag: a50660d9-f54c-59bb-813b-67ff89d432a8
+		summarizeBy: sum
+		sourceColumn: payment_count
+
+		annotation SummarizationSetBy = Automatic
+
+	column approval_hours
+		dataType: double
+		formatString: 0.00
+		lineageTag: 2fad2e5d-0528-53e7-8514-e1b304182651
+		summarizeBy: sum
+		sourceColumn: approval_hours
+
+		annotation SummarizationSetBy = Automatic
+
+	column delivery_days
+		dataType: double
+		formatString: 0.00
+		lineageTag: cd789cec-abd8-5505-bcc5-e31258bbac06
+		summarizeBy: none
+		sourceColumn: delivery_days
+
+		annotation SummarizationSetBy = Automatic
+
+	column estimated_delivery_days
+		dataType: double
+		formatString: 0.00
+		lineageTag: e445d612-52c2-539d-8591-d614e905114b
+		summarizeBy: none
+		sourceColumn: estimated_delivery_days
+
+		annotation SummarizationSetBy = Automatic
+
+	column delivery_delay_days
+		dataType: int64
+		formatString: 0
+		lineageTag: 92a7d044-8bf5-5eec-bf44-6b8d00c9fdc8
+		summarizeBy: none
+		sourceColumn: delivery_delay_days
+
+		annotation SummarizationSetBy = Automatic
+
+	column review_score
+		dataType: int64
+		formatString: 0
+		lineageTag: 5749e6f4-cd0e-5a88-bd14-7a985ea75698
+		summarizeBy: none
+		sourceColumn: review_score
+
+		annotation SummarizationSetBy = Automatic
+
+	partition FactOrders = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents(DataFolder & "\fact_orders.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    Promoted = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
+				    Selected = Table.SelectColumns(Promoted, {"order_id", "customer_key", "customer_location_key", "purchase_date_key", "approved_date_key", "delivered_date_key", "estimated_date_key", "main_payment_type_key", "order_status", "purchase_timestamp", "is_revenue_order", "is_canceled", "is_delivered", "is_on_time", "is_late", "items_count", "distinct_sellers", "items_price", "freight_value", "order_value", "revenue", "payment_value", "payment_count", "approval_hours", "delivery_days", "estimated_delivery_days", "delivery_delay_days", "review_score"}),
+				    Typed = Table.TransformColumnTypes(Selected, {{"order_id", type text}, {"customer_key", Int64.Type}, {"customer_location_key", Int64.Type}, {"purchase_date_key", Int64.Type}, {"approved_date_key", Int64.Type}, {"delivered_date_key", Int64.Type}, {"estimated_date_key", Int64.Type}, {"main_payment_type_key", Int64.Type}, {"order_status", type text}, {"purchase_timestamp", type datetime}, {"is_revenue_order", type logical}, {"is_canceled", type logical}, {"is_delivered", type logical}, {"is_on_time", type logical}, {"is_late", type logical}, {"items_count", Int64.Type}, {"distinct_sellers", Int64.Type}, {"items_price", Currency.Type}, {"freight_value", Currency.Type}, {"order_value", Currency.Type}, {"revenue", Currency.Type}, {"payment_value", Currency.Type}, {"payment_count", Int64.Type}, {"approval_hours", type number}, {"delivery_days", type number}, {"estimated_delivery_days", type number}, {"delivery_delay_days", Int64.Type}, {"review_score", Int64.Type}}, "en-US"),
+				    Incremental = Table.SelectRows(Typed, each [purchase_timestamp] >= RangeStart and [purchase_timestamp] < RangeEnd)
+				in
+				    Incremental
+
+	annotation PBI_ResultType = Table

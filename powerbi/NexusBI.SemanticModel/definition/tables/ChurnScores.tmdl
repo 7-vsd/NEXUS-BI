@@ -1,0 +1,66 @@
+/// ML: churn probability per active customer at the scoring cutoff.
+table ChurnScores
+	lineageTag: 18792149-af8d-52b8-b891-d8b64d0cc6da
+
+	column customer_unique_id
+		dataType: string
+		lineageTag: de1757c4-8113-509b-a4c3-8c2b7c22ae18
+		summarizeBy: none
+		sourceColumn: customer_unique_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column cutoff_date
+		dataType: dateTime
+		formatString: yyyy-mm-dd
+		lineageTag: b7f597b3-e5d8-5927-bc2d-683784481ba8
+		summarizeBy: none
+		sourceColumn: cutoff_date
+
+		annotation SummarizationSetBy = Automatic
+
+	column churn_probability
+		dataType: double
+		formatString: 0.00
+		lineageTag: c8594a55-981c-5766-9a54-f2e5fff33040
+		summarizeBy: sum
+		sourceColumn: churn_probability
+
+		annotation SummarizationSetBy = Automatic
+
+	column risk_band
+		dataType: string
+		lineageTag: 06507bc5-19a6-5a6c-9940-5a86f5a9484f
+		summarizeBy: none
+		sourceColumn: risk_band
+
+		annotation SummarizationSetBy = Automatic
+
+	column model_name
+		dataType: string
+		lineageTag: 643273ba-cc9b-50da-ac05-962f0623df38
+		summarizeBy: none
+		sourceColumn: model_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column actual_churn
+		dataType: string
+		lineageTag: 45504531-ab06-5fb3-9dd9-93d8c5758f0d
+		summarizeBy: none
+		sourceColumn: actual_churn
+
+		annotation SummarizationSetBy = Automatic
+
+	partition ChurnScores = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents(DataFolder & "\churn_scores.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    Promoted = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
+				    Selected = Table.SelectColumns(Promoted, {"customer_unique_id", "cutoff_date", "churn_probability", "risk_band", "model_name", "actual_churn"}),
+				    Typed = Table.TransformColumnTypes(Selected, {{"customer_unique_id", type text}, {"cutoff_date", type date}, {"churn_probability", type number}, {"risk_band", type text}, {"model_name", type text}, {"actual_churn", type text}}, "en-US")
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table

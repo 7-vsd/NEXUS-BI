@@ -1,0 +1,28 @@
+/// Disconnected slicer table driving the [Selected KPI Value] dynamic measure.
+table 'KPI Selector'
+	lineageTag: 033656b2-0b82-5e49-88e8-583c4a2b8d56
+
+	column KPI
+		dataType: string
+		lineageTag: 25c9e22e-9cef-5dc6-9220-2cca17e273f1
+		summarizeBy: none
+		sourceColumn: [KPI]
+		sortByColumn: KPI_Order
+
+		annotation SummarizationSetBy = Automatic
+
+	column KPI_Order
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: e8887331-6b5d-50b9-bfef-dc1ff6cde8dd
+		summarizeBy: none
+		sourceColumn: [KPI_Order]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'KPI Selector' = calculated
+		mode: import
+		source = DATATABLE ( "KPI", STRING, "KPI_Order", INTEGER, { { "Revenue", 1 }, { "Orders", 2 }, { "Customers", 3 }, { "Average Order Value", 4 }, { "On-Time Delivery %", 5 }, { "Avg Review Score", 6 } } )
+
+	annotation PBI_ResultType = Table

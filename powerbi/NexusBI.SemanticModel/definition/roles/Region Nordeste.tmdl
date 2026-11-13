@@ -1,0 +1,5 @@
+/// Static RLS: only customers in region Nordeste.
+role 'Region Nordeste'
+	modelPermission: read
+
+	tablePermission DimCustomer = DimCustomer[region] = "Nordeste"

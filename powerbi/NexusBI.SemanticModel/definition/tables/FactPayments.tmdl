@@ -1,0 +1,89 @@
+/// Grain: one row per payment transaction.
+table FactPayments
+	lineageTag: 83ef8594-504f-53af-8dae-aed9237f70de
+
+	column order_id
+		dataType: string
+		lineageTag: 314319a5-40f0-58a2-bc11-534c15138975
+		summarizeBy: none
+		sourceColumn: order_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column payment_sequential
+		dataType: int64
+		formatString: 0
+		lineageTag: 0d899fda-db36-5d7a-9f70-3124e97e6b67
+		summarizeBy: sum
+		sourceColumn: payment_sequential
+
+		annotation SummarizationSetBy = Automatic
+
+	column payment_type_key
+		dataType: int64
+		formatString: 0
+		isHidden
+		lineageTag: 9c9a750a-3b81-521d-87fc-76c87de804e5
+		summarizeBy: none
+		sourceColumn: payment_type_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column customer_key
+		dataType: int64
+		formatString: 0
+		isHidden
+		lineageTag: 50626d5f-1334-5fe4-a080-f021dae6997a
+		summarizeBy: none
+		sourceColumn: customer_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column purchase_date_key
+		dataType: int64
+		formatString: 0
+		isHidden
+		lineageTag: b42002ae-641e-5a05-bdb7-2badf8c0c036
+		summarizeBy: none
+		sourceColumn: purchase_date_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column payment_installments
+		dataType: int64
+		formatString: 0
+		lineageTag: 528d9510-b2ed-5828-b24e-b9fdbd826da6
+		summarizeBy: sum
+		sourceColumn: payment_installments
+
+		annotation SummarizationSetBy = Automatic
+
+	column payment_value
+		dataType: decimal
+		formatString: #,0.00
+		lineageTag: 03fa0daf-4254-5ede-8bed-5fb9ed4453c5
+		summarizeBy: sum
+		sourceColumn: payment_value
+
+		annotation SummarizationSetBy = Automatic
+
+	column is_revenue_order
+		dataType: boolean
+		lineageTag: 201d5977-12b8-5983-a853-2d295fc51546
+		summarizeBy: none
+		sourceColumn: is_revenue_order
+
+		annotation SummarizationSetBy = Automatic
+
+	partition FactPayments = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents(DataFolder & "\fact_payments.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    Promoted = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
+				    Selected = Table.SelectColumns(Promoted, {"order_id", "payment_sequential", "payment_type_key", "customer_key", "purchase_date_key", "payment_installments", "payment_value", "is_revenue_order"}),
+				    Typed = Table.TransformColumnTypes(Selected, {{"order_id", type text}, {"payment_sequential", Int64.Type}, {"payment_type_key", Int64.Type}, {"customer_key", Int64.Type}, {"purchase_date_key", Int64.Type}, {"payment_installments", Int64.Type}, {"payment_value", Currency.Type}, {"is_revenue_order", type logical}}, "en-US")
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table

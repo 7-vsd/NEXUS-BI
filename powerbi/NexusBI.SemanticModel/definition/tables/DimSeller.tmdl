@@ -1,0 +1,80 @@
+/// Seller dimension (SCD1).
+table DimSeller
+	lineageTag: 53125d49-2346-5e2d-b444-5ef01c95ec54
+
+	column seller_key
+		dataType: int64
+		formatString: 0
+		isHidden
+		lineageTag: 3c47a8ea-3772-586a-b720-821b89a84ce5
+		summarizeBy: none
+		sourceColumn: seller_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column seller_id
+		dataType: string
+		lineageTag: a5ef95dd-bd4c-5f71-89ae-bc68685a5758
+		summarizeBy: none
+		sourceColumn: seller_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column zip_code_prefix
+		dataType: double
+		formatString: 0.00
+		lineageTag: d1ed1bfd-9842-57f4-954e-7db74887df43
+		summarizeBy: sum
+		sourceColumn: zip_code_prefix
+		dataCategory: PostalCode
+
+		annotation SummarizationSetBy = Automatic
+
+	column city
+		dataType: string
+		lineageTag: d7ca6bfe-2ff0-5dff-9340-b47adc5f3c20
+		summarizeBy: none
+		sourceColumn: city
+		dataCategory: City
+
+		annotation SummarizationSetBy = Automatic
+
+	column state
+		dataType: string
+		lineageTag: e8e581e0-50b8-5bdd-9f2e-24980a86f9dc
+		summarizeBy: none
+		sourceColumn: state
+		dataCategory: StateOrProvince
+
+		annotation SummarizationSetBy = Automatic
+
+	column region
+		dataType: string
+		lineageTag: 0eeefc86-cd9f-50a1-b595-3c1111e56da9
+		summarizeBy: none
+		sourceColumn: region
+
+		annotation SummarizationSetBy = Automatic
+
+	column location_key
+		dataType: int64
+		formatString: 0
+		isHidden
+		lineageTag: d99dc483-2af5-565e-aa70-fbc5a3780aec
+		summarizeBy: none
+		sourceColumn: location_key
+
+		annotation SummarizationSetBy = Automatic
+
+	partition DimSeller = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents(DataFolder & "\dim_seller.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    Promoted = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
+				    Selected = Table.SelectColumns(Promoted, {"seller_key", "seller_id", "zip_code_prefix", "city", "state", "region", "location_key"}),
+				    Typed = Table.TransformColumnTypes(Selected, {{"seller_key", Int64.Type}, {"seller_id", type text}, {"zip_code_prefix", type number}, {"city", type text}, {"state", type text}, {"region", type text}, {"location_key", Int64.Type}}, "en-US")
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table

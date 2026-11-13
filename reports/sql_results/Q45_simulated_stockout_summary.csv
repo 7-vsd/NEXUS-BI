@@ -1,0 +1,11 @@
+category,weeks,stockout_weeks,lost_units,is_synthetic
+bed_bath_table,100,25,2942,True
+health_beauty,103,22,2549,True
+sports_leisure,100,28,2191,True
+furniture_decor,105,27,2190,True
+housewares,100,24,1883,True
+computers_accessories,100,21,1876,True
+watches_gifts,100,21,1554,True
+garden_tools,100,29,1377,True
+auto,100,26,1320,True
+toys,100,18,1074,True

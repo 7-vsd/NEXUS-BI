@@ -1,0 +1,47 @@
+[
+  {
+    "check": "json_files_parse_and_required_keys",
+    "status": "PASS",
+    "detail": ""
+  },
+  {
+    "check": "tmdl_tab_indentation",
+    "status": "PASS",
+    "detail": ""
+  },
+  {
+    "check": "tmdl_one_file_per_table",
+    "status": "PASS",
+    "detail": "21 files / 21 tables"
+  },
+  {
+    "check": "relationship_columns_exist",
+    "status": "PASS",
+    "detail": ""
+  },
+  {
+    "check": "visual_field_references_exist",
+    "status": "PASS",
+    "detail": ""
+  },
+  {
+    "check": "dax_references_resolve",
+    "status": "PASS",
+    "detail": ""
+  },
+  {
+    "check": "rls_references_resolve",
+    "status": "PASS",
+    "detail": ""
+  },
+  {
+    "check": "relationship_cardinality_and_integrity",
+    "status": "PASS",
+    "detail": "DimCustomer->CustomerSegments: 1114 customer versions not scored (expected); DimCustomer->ChurnScores: 22152 customer versions not scored (expected)"
+  },
+  {
+    "check": "dax_logic_matches_reconciled_kpis",
+    "status": "PASS",
+    "detail": "{\"total_revenue\": 15735527.03, \"total_orders\": 98207, \"average_order_value\": 160.23, \"unique_customers\": 94990, \"on_time_delivery_rate\": 0.932269, \"cancellation_rate\": 0.006285, \"avg_review_score\": 4.0864, \"items_sold\": 112101}"
+  }
+]

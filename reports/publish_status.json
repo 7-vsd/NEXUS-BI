@@ -1,0 +1,27 @@
+{
+  "published_at": "2026-11-13T05:34:00.894330+00:00",
+  "nexus_ml.customer_segments": 94983,
+  "nexus_ml.churn_scores": 73971,
+  "nexus_ml.revenue_forecast": 600,
+  "nexus_ml.demand_forecast": 800,
+  "nexus_ml.anomalies": 566,
+  "powerbi_extracts": {
+    "nexus_dw.dim_date": 1827,
+    "nexus_dw.dim_customer": 96356,
+    "nexus_dw.dim_product": 32952,
+    "nexus_dw.dim_seller": 3096,
+    "nexus_dw.dim_location": 19175,
+    "nexus_dw.dim_payment_type": 6,
+    "nexus_dw.fact_orders": 99441,
+    "nexus_dw.fact_order_items": 112650,
+    "nexus_dw.fact_payments": 103886,
+    "nexus_dw.fact_reviews": 99224,
+    "nexus_ml.customer_segments": 94983,
+    "nexus_ml.churn_scores": 73971,
+    "nexus_ml.revenue_forecast": 600,
+    "nexus_ml.demand_forecast": 800,
+    "nexus_ml.anomalies": 566,
+    "nexus_dw.syn_inventory_weekly": 2872,
+    "nexus_dw.vw_syn_category_margin": 74
+  }
+}

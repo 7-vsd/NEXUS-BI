@@ -1,0 +1,70 @@
+# NEXUS BI local stack.
+#   docker compose up -d db                      # PostgreSQL only
+#   docker compose run --rm pipeline             # full ETL + warehouse + ML (needs data/raw/*.csv)
+#   docker compose up -d api app                 # API on :8000, Streamlit on :8501
+# Secrets come from .env (copy .env.example). Nothing is hardcoded here.
+name: nexus-bi
+
+x-app-env: &app-env
+  NEXUS_DB_HOST: db
+  NEXUS_DB_PORT: "5432"
+  NEXUS_DB_NAME: ${NEXUS_DB_NAME:-nexus_bi}
+  NEXUS_DB_USER: ${NEXUS_DB_USER:-nexus}
+  NEXUS_DB_PASSWORD: ${NEXUS_DB_PASSWORD:?set NEXUS_DB_PASSWORD in .env}
+  NEXUS_LOG_LEVEL: ${NEXUS_LOG_LEVEL:-INFO}
+
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: ${NEXUS_DB_NAME:-nexus_bi}
+      POSTGRES_USER: ${NEXUS_DB_USER:-nexus}
+      POSTGRES_PASSWORD: ${NEXUS_DB_PASSWORD:?set NEXUS_DB_PASSWORD in .env}
+    ports: ["5432:5432"]
+    volumes: [pgdata:/var/lib/postgresql/data]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      retries: 20
+
+  pipeline:
+    build: .
+    command: ["python", "-m", "src.pipeline", "--stage", "all"]
+    environment: *app-env
+    volumes:
+      - ./data:/app/data
+      - ./reports:/app/reports
+      - ./ml/artifacts:/app/ml/artifacts
+      - ./logs:/app/logs
+    depends_on:
+      db: {condition: service_healthy}
+    profiles: ["pipeline"]
+
+  api:
+    build: .
+    command: ["uvicorn", "api.main:app", "--host", "0.0.0.0", "--port", "8000"]
+    environment: *app-env
+    ports: ["8000:8000"]
+    volumes:
+      - ./data:/app/data:ro
+      - ./ml/artifacts:/app/ml/artifacts:ro
+      - ./logs:/app/logs
+    depends_on:
+      db: {condition: service_healthy}
+
+  app:
+    build: .
+    command: ["streamlit", "run", "app/streamlit_app.py", "--server.port", "8501", "--server.address", "0.0.0.0"]
+    environment:
+      <<: *app-env
+      NEXUS_API_URL: http://api:8000
+    ports: ["8501:8501"]
+    volumes:
+      - ./data:/app/data:ro
+      - ./reports:/app/reports:ro
+      - ./ml/artifacts:/app/ml/artifacts:ro
+      - ./logs:/app/logs:ro
+    depends_on: [api]
+
+volumes:
+  pgdata:

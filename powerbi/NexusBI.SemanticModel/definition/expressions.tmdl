@@ -1,0 +1,14 @@
+expression DataFolder = "C:\Users\91705\Nexus_bi\NEXUS-BI\data\processed\powerbi" meta [IsParameterQuery=true, Type="Text", IsParameterQueryRequired=true]
+	lineageTag: 45c356af-d5f3-5f0c-b640-14790c0d432e
+
+	annotation PBI_ResultType = Text
+
+expression RangeStart = #datetime(2016, 1, 1, 0, 0, 0) meta [IsParameterQuery=true, Type="DateTime", IsParameterQueryRequired=true]
+	lineageTag: e70dd26e-d1fa-5aad-997a-3dfdf1268ebb
+
+	annotation PBI_ResultType = DateTime
+
+expression RangeEnd = #datetime(2030, 1, 1, 0, 0, 0) meta [IsParameterQuery=true, Type="DateTime", IsParameterQueryRequired=true]
+	lineageTag: 4832ad0b-1b3d-5ccb-b18c-cf15d5da54b2
+
+	annotation PBI_ResultType = DateTime

@@ -1,0 +1,64 @@
+{
+  "name": "NEXUS BI Vivid",
+  "dataColors": ["#0D9488", "#4F46E5", "#DB2777", "#D97706", "#7C3AED", "#0284C7", "#16A34A", "#DC2626", "#EA580C", "#0891B2", "#9333EA", "#65A30D"],
+  "background": "#FFFFFF",
+  "foreground": "#0B1F3A",
+  "tableAccent": "#4F46E5",
+  "good": "#16A34A",
+  "neutral": "#EAB308",
+  "bad": "#DC2626",
+  "maximum": "#0F766E",
+  "center": "#5EEAD4",
+  "minimum": "#F0FDFA",
+  "hyperlink": "#4F46E5",
+  "textClasses": {
+    "title": {"fontFace": "Segoe UI Semibold", "fontSize": 11, "color": "#0B1F3A"},
+    "header": {"fontFace": "Segoe UI Semibold", "fontSize": 11, "color": "#0B1F3A"},
+    "label": {"fontFace": "Segoe UI", "fontSize": 9, "color": "#334155"},
+    "callout": {"fontFace": "Segoe UI Semibold", "fontSize": 24, "color": "#FFFFFF"}
+  },
+  "visualStyles": {
+    "*": {
+      "*": {
+        "background": [{"show": true, "color": {"solid": {"color": "#FFFFFF"}}, "transparency": 0}],
+        "border": [{"show": true, "color": {"solid": {"color": "#C7D2FE"}}, "radius": 10}],
+        "dropShadow": [{"show": true}],
+        "padding": [{"top": 6, "bottom": 6, "left": 8, "right": 8}],
+        "title": [{"show": true, "fontColor": {"solid": {"color": "#0B1F3A"}}, "fontSize": 11}],
+        "visualTooltip": [{"show": true}],
+        "visualHeader": [{"show": true}]
+      }
+    },
+    "page": {
+      "*": {
+        "background": [{"color": {"solid": {"color": "#0B1F3A"}}, "transparency": 0}],
+        "outspace": [{"color": {"solid": {"color": "#071426"}}}]
+      }
+    },
+    "pageNavigator": {
+      "*": {
+        "fill": [{"show": true, "fillColor": {"solid": {"color": "#13294B"}}}],
+        "text": [{"fontColor": {"solid": {"color": "#E6EDF5"}}, "fontSize": 11}],
+        "outline": [{"show": true, "lineColor": {"solid": {"color": "#14B8A6"}}}]
+      }
+    },
+    "tableEx": {
+      "*": {
+        "columnHeaders": [{"backColor": {"solid": {"color": "#4338CA"}}, "fontColor": {"solid": {"color": "#FFFFFF"}}}],
+        "values": [{"backColorSecondary": {"solid": {"color": "#EEF2FF"}}}]
+      }
+    },
+    "pivotTable": {
+      "*": {
+        "columnHeaders": [{"backColor": {"solid": {"color": "#0F766E"}}, "fontColor": {"solid": {"color": "#FFFFFF"}}}],
+        "rowHeaders": [{"backColor": {"solid": {"color": "#CCFBF1"}}, "fontColor": {"solid": {"color": "#0B1F3A"}}}]
+      }
+    },
+    "slicer": {
+      "*": {
+        "header": [{"fontColor": {"solid": {"color": "#4338CA"}}}],
+        "items": [{"fontColor": {"solid": {"color": "#0B1F3A"}}}]
+      }
+    }
+  }
+}

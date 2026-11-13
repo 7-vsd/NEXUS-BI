@@ -1,0 +1,87 @@
+[
+  {
+    "check": "Airflow DagBag parse (Airflow 3.1.8 venv)",
+    "status": "PASS",
+    "evidence": "reports/tests/junit_airflow.xml \u2013 0 import errors, 9 tasks"
+  },
+  {
+    "check": "airflow dags test nexus_bi_pipeline (end-to-end)",
+    "status": "PASS",
+    "evidence": "DagRun state=success; 8 tasks success, send_failure_status skipped (2nd run). 1st run exposed a pandas-3.1 dtype bug in demand forecasting, fixed."
+  },
+  {
+    "check": "Airflow scheduler with live schedule",
+    "status": "NOT RUN",
+    "evidence": "Only `dags test` executed; no scheduler/worker deployment"
+  },
+  {
+    "check": "Full pipeline CLI (python -m src.pipeline --stage all stages)",
+    "status": "PASS",
+    "evidence": "logs/pipeline_runs.jsonl"
+  },
+  {
+    "check": "Python 3.10 + pandas 2.3 compatibility (no-DB pipeline + 79 tests)",
+    "status": "PASS",
+    "evidence": "reports/tests/junit_py310.xml"
+  },
+  {
+    "check": "SQL \u2194 Python reconciliation",
+    "status": "PASS",
+    "evidence": "20/20 \u2013 reports/sql_results/_reconciliation.csv"
+  },
+  {
+    "check": "SQL library execution (47 queries)",
+    "status": "PASS",
+    "evidence": "reports/sql_results/_query_catalog.csv"
+  },
+  {
+    "check": "Notebooks executed (nbconvert, 5)",
+    "status": "PASS",
+    "evidence": "0 error outputs"
+  },
+  {
+    "check": "FastAPI live server (uvicorn) /health",
+    "status": "PASS",
+    "evidence": "status=ok, 5/5 models loaded"
+  },
+  {
+    "check": "Streamlit live server + headless Chrome screenshots",
+    "status": "PASS",
+    "evidence": "docs/user_manual/screenshots/*.png"
+  },
+  {
+    "check": "Power BI static validation + DAX logic recomputation",
+    "status": "PASS",
+    "evidence": "reports/powerbi_validation.json"
+  },
+  {
+    "check": "Power BI Desktop open/refresh/render",
+    "status": "NOT RUN",
+    "evidence": "Power BI Desktop unavailable in build environment (Linux)"
+  },
+  {
+    "check": "docker compose config",
+    "status": "PASS",
+    "evidence": "compose file valid; services db, api, app, pipeline"
+  },
+  {
+    "check": "Docker image build",
+    "status": "NOT RUN",
+    "evidence": "Docker Hub blocked by network policy (403 on registry-1.docker.io)"
+  },
+  {
+    "check": "Azure deployment",
+    "status": "NOT RUN",
+    "evidence": "No subscription/credentials; design + commands documented"
+  },
+  {
+    "check": "Windows execution of scripts/nexus.ps1",
+    "status": "NOT RUN",
+    "evidence": "Build ran on Linux; see FINAL_DELIVERY_REPORT for Windows checks"
+  },
+  {
+    "check": "PySpark 4.3 jobs \u2194 pandas parity",
+    "status": "PASS",
+    "evidence": "tests/integration/test_spark_parity.py (in main suite)"
+  }
+]

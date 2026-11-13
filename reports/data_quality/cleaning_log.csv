@@ -1,0 +1,14 @@
+dataset,action,rows_affected,detail
+category_translation,append_manual_translations,3,
+geolocation,drop_duplicates,279694,subset=all columns
+geolocation,drop_coordinates_outside_brazil,27,
+geolocation,aggregate_to_zip_prefix,19011,"median lat/lng, modal city/state per prefix"
+customers,normalize_city,226,"lower-case, accents removed"
+sellers,normalize_city,12,"lower-case, accents removed"
+products,fill_missing_category,610,set to 'unknown'
+products,manual_category_translation,13,"pc_gamer, portateis_cozinha_e_preparadores_de_alimentos"
+products,zero_weight_to_null,4,weight 0 g treated as unknown
+orders,null_order_delivered_carrier_date_before_purchase,166,
+orders,derive_delivery_metrics,96470,"delivery_days, delay, on-time flags"
+payments,installments_0_to_1,2,a payment has at least 1 installment
+reviews,flag_latest_review_per_order,551,"older reviews for the same order flagged (kept, not deleted)"

@@ -1,0 +1,80 @@
+relationship 9a7a84a5-b931-52cc-83d2-7d5c3117ede5
+	fromColumn: FactOrders.purchase_date_key
+	toColumn: DimDate.date_key
+
+relationship c61c966a-24ad-56cc-85a7-fa8183319c5b
+	isActive: false
+	fromColumn: FactOrders.delivered_date_key
+	toColumn: DimDate.date_key
+
+relationship 6d167d9f-591b-532b-8cb1-337932cca22c
+	fromColumn: FactOrders.customer_key
+	toColumn: DimCustomer.customer_key
+
+relationship be9a6d85-0685-5907-8fb9-d226ffff7f16
+	fromColumn: FactOrders.customer_location_key
+	toColumn: DimLocation.location_key
+
+relationship 904d2dff-eb3a-5e86-a038-50f28fa14a42
+	fromColumn: FactOrders.main_payment_type_key
+	toColumn: DimPaymentType.payment_type_key
+
+relationship a4e66d41-154a-51b5-879d-21e8d1c3395b
+	fromColumn: FactOrderItems.purchase_date_key
+	toColumn: DimDate.date_key
+
+relationship 04c4ad84-06a9-55df-8c6f-8cbdee9cd16a
+	fromColumn: FactOrderItems.product_key
+	toColumn: DimProduct.product_key
+
+relationship 011b3177-3f4f-55c8-a8fd-9a63adc02dd0
+	fromColumn: FactOrderItems.seller_key
+	toColumn: DimSeller.seller_key
+
+relationship 510764d5-59dc-55e7-a2f5-00abb26eeb85
+	fromColumn: FactOrderItems.customer_key
+	toColumn: DimCustomer.customer_key
+
+relationship 0ff18fa8-6a10-5646-910e-0ccf0f4ff280
+	fromColumn: FactPayments.purchase_date_key
+	toColumn: DimDate.date_key
+
+relationship 9c2141db-316a-5653-9d38-1321fcc28ec0
+	fromColumn: FactPayments.payment_type_key
+	toColumn: DimPaymentType.payment_type_key
+
+relationship ddb7fe71-ed1b-591f-9d4a-5d5c7188e83e
+	fromColumn: FactPayments.customer_key
+	toColumn: DimCustomer.customer_key
+
+relationship d1ca9361-12b1-512d-8b6e-e01adec02eb4
+	fromColumn: FactReviews.purchase_date_key
+	toColumn: DimDate.date_key
+
+relationship 8e636b70-8368-5b0e-b655-cbe40b6ad95e
+	fromColumn: FactReviews.customer_key
+	toColumn: DimCustomer.customer_key
+
+relationship 24218c97-56fc-55c2-a593-ed9a526bfa8d
+	fromColumn: DimCustomer.customer_unique_id
+	toColumn: CustomerSegments.customer_unique_id
+
+relationship dfe0fb48-a65c-5999-bcca-be42f0e5a64f
+	fromColumn: DimCustomer.customer_unique_id
+	toColumn: ChurnScores.customer_unique_id
+
+relationship 4515278e-97b0-5402-9559-ea6011b0ca62
+	fromColumn: RevenueForecast.forecast_date
+	toColumn: DimDate.full_date
+
+relationship b3435290-fcb2-5556-b5e3-f21d8a578904
+	fromColumn: DemandForecast.week_start
+	toColumn: DimDate.full_date
+
+relationship 6b4be378-cd97-5c85-bb56-3fdfb9932e7b
+	fromColumn: Anomalies.metric_date
+	toColumn: DimDate.full_date
+
+relationship 9dac7646-3cac-5e6b-aaa4-2dc085b7131f
+	fromColumn: SynInventoryWeekly.week_start
+	toColumn: DimDate.full_date

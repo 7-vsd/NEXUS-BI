@@ -1,0 +1,114 @@
+/// Grain: one row per (review_id, order_id).
+table FactReviews
+	lineageTag: 7debfb34-2eab-5373-bb14-24e1f0360cc1
+
+	column review_id
+		dataType: string
+		lineageTag: d6824b03-3ac7-5a03-8490-199e3fbe7389
+		summarizeBy: none
+		sourceColumn: review_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column order_id
+		dataType: string
+		lineageTag: f32a4c77-b6b8-5303-8305-e4c1d9faaee8
+		summarizeBy: none
+		sourceColumn: order_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column customer_key
+		dataType: int64
+		formatString: 0
+		isHidden
+		lineageTag: 04bf672a-3bd2-5ba3-842b-a92708bb7e36
+		summarizeBy: none
+		sourceColumn: customer_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column purchase_date_key
+		dataType: int64
+		formatString: 0
+		isHidden
+		lineageTag: 3253a7b8-cde9-5785-bc8d-451c1c7ff7a8
+		summarizeBy: none
+		sourceColumn: purchase_date_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column review_date_key
+		dataType: int64
+		formatString: 0
+		isHidden
+		lineageTag: 3165739f-6633-536a-a0e8-39fef6cd3afc
+		summarizeBy: none
+		sourceColumn: review_date_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column answer_date_key
+		dataType: int64
+		formatString: 0
+		isHidden
+		lineageTag: a17f5583-407a-506b-9eb4-575c1ede603b
+		summarizeBy: none
+		sourceColumn: answer_date_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column review_score
+		dataType: int64
+		formatString: 0
+		lineageTag: 4f9114f1-0873-5886-bb9a-18248ebcb5ca
+		summarizeBy: none
+		sourceColumn: review_score
+
+		annotation SummarizationSetBy = Automatic
+
+	column has_comment
+		dataType: boolean
+		lineageTag: d405a822-6559-5413-a5a2-dfa8d1fc79b6
+		summarizeBy: none
+		sourceColumn: has_comment
+
+		annotation SummarizationSetBy = Automatic
+
+	column has_title
+		dataType: boolean
+		lineageTag: f3ed51c0-461c-5569-8fad-82cbd73e99a8
+		summarizeBy: none
+		sourceColumn: has_title
+
+		annotation SummarizationSetBy = Automatic
+
+	column response_hours
+		dataType: double
+		formatString: 0.00
+		lineageTag: d54ecf92-bac0-5f1e-b87b-f2e100e68ca3
+		summarizeBy: sum
+		sourceColumn: response_hours
+
+		annotation SummarizationSetBy = Automatic
+
+	column is_latest_for_order
+		dataType: boolean
+		lineageTag: 09ee8343-89fe-53c9-bf0e-48e3f0fda472
+		summarizeBy: none
+		sourceColumn: is_latest_for_order
+
+		annotation SummarizationSetBy = Automatic
+
+	partition FactReviews = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents(DataFolder & "\fact_reviews.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    Promoted = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
+				    Selected = Table.SelectColumns(Promoted, {"review_id", "order_id", "customer_key", "purchase_date_key", "review_date_key", "answer_date_key", "review_score", "has_comment", "has_title", "response_hours", "is_latest_for_order"}),
+				    Typed = Table.TransformColumnTypes(Selected, {{"review_id", type text}, {"order_id", type text}, {"customer_key", Int64.Type}, {"purchase_date_key", Int64.Type}, {"review_date_key", Int64.Type}, {"answer_date_key", Int64.Type}, {"review_score", Int64.Type}, {"has_comment", type logical}, {"has_title", type logical}, {"response_hours", type number}, {"is_latest_for_order", type logical}}, "en-US")
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table

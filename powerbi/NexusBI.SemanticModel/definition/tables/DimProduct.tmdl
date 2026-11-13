@@ -1,0 +1,138 @@
+/// Product dimension (SCD1) with English category names.
+table DimProduct
+	lineageTag: 8408e6f2-7300-5c10-890d-24d32c845668
+
+	column product_key
+		dataType: int64
+		formatString: 0
+		isHidden
+		lineageTag: ea4d9c7f-2a95-5941-9308-71fc1f361e29
+		summarizeBy: none
+		sourceColumn: product_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column product_id
+		dataType: string
+		lineageTag: b7d90027-cb1e-56a8-adf4-054e0ff78c26
+		summarizeBy: none
+		sourceColumn: product_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column category_name_pt
+		dataType: string
+		lineageTag: 5581cf2f-fde4-5dbb-872d-95c2181dfa56
+		summarizeBy: none
+		sourceColumn: category_name_pt
+
+		annotation SummarizationSetBy = Automatic
+
+	column category_name_en
+		dataType: string
+		lineageTag: af650494-65ff-58ed-8aa7-0649a45441e0
+		summarizeBy: none
+		sourceColumn: category_name_en
+
+		annotation SummarizationSetBy = Automatic
+
+	column category_display_name
+		dataType: string
+		lineageTag: 94038717-29b3-5807-95b7-bd2ec07f5fd5
+		summarizeBy: none
+		sourceColumn: category_display_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column product_name_length
+		dataType: int64
+		formatString: 0
+		lineageTag: e34c55a2-743f-54f9-bc1c-83c9b9bbe1b0
+		summarizeBy: sum
+		sourceColumn: product_name_length
+
+		annotation SummarizationSetBy = Automatic
+
+	column product_description_length
+		dataType: int64
+		formatString: 0
+		lineageTag: 31cd4184-5e05-5bdf-afc6-533fe297b06a
+		summarizeBy: sum
+		sourceColumn: product_description_length
+
+		annotation SummarizationSetBy = Automatic
+
+	column product_photos_qty
+		dataType: int64
+		formatString: 0
+		lineageTag: f8adc75c-c019-5b74-86de-da00a1e82ebb
+		summarizeBy: sum
+		sourceColumn: product_photos_qty
+
+		annotation SummarizationSetBy = Automatic
+
+	column product_weight_g
+		dataType: double
+		formatString: 0.00
+		lineageTag: 10adc3b9-7eab-5d0e-a9be-41e0c6493bf6
+		summarizeBy: sum
+		sourceColumn: product_weight_g
+
+		annotation SummarizationSetBy = Automatic
+
+	column product_length_cm
+		dataType: double
+		formatString: 0.00
+		lineageTag: da0642ea-9fb9-5c3f-99f4-c380d335167a
+		summarizeBy: sum
+		sourceColumn: product_length_cm
+
+		annotation SummarizationSetBy = Automatic
+
+	column product_height_cm
+		dataType: double
+		formatString: 0.00
+		lineageTag: 5b30cc6a-fe01-50dc-b71f-325b6b9aef80
+		summarizeBy: sum
+		sourceColumn: product_height_cm
+
+		annotation SummarizationSetBy = Automatic
+
+	column product_width_cm
+		dataType: double
+		formatString: 0.00
+		lineageTag: 16447c5a-543c-59fc-9240-5d78a5a68fbd
+		summarizeBy: sum
+		sourceColumn: product_width_cm
+
+		annotation SummarizationSetBy = Automatic
+
+	column product_volume_cm3
+		dataType: double
+		formatString: 0.00
+		lineageTag: efa9aa6a-43c6-53e6-8bb6-b7f1f3c70edd
+		summarizeBy: sum
+		sourceColumn: product_volume_cm3
+
+		annotation SummarizationSetBy = Automatic
+
+	column weight_band
+		dataType: string
+		lineageTag: 5273b988-70f3-5344-8ac0-f5f264d4f5fa
+		summarizeBy: none
+		sourceColumn: weight_band
+
+		annotation SummarizationSetBy = Automatic
+
+	partition DimProduct = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents(DataFolder & "\dim_product.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    Promoted = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
+				    Selected = Table.SelectColumns(Promoted, {"product_key", "product_id", "category_name_pt", "category_name_en", "category_display_name", "product_name_length", "product_description_length", "product_photos_qty", "product_weight_g", "product_length_cm", "product_height_cm", "product_width_cm", "product_volume_cm3", "weight_band"}),
+				    Typed = Table.TransformColumnTypes(Selected, {{"product_key", Int64.Type}, {"product_id", type text}, {"category_name_pt", type text}, {"category_name_en", type text}, {"category_display_name", type text}, {"product_name_length", Int64.Type}, {"product_description_length", Int64.Type}, {"product_photos_qty", Int64.Type}, {"product_weight_g", type number}, {"product_length_cm", type number}, {"product_height_cm", type number}, {"product_width_cm", type number}, {"product_volume_cm3", type number}, {"weight_band", type text}}, "en-US")
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table

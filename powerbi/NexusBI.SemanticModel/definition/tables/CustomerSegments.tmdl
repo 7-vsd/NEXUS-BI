@@ -1,0 +1,119 @@
+/// ML: RFM + K-Means segment per customer_unique_id.
+table CustomerSegments
+	lineageTag: 57bcefb3-09d6-5df5-aa00-60cc4de1e399
+
+	column customer_unique_id
+		dataType: string
+		lineageTag: ac145345-e59c-58f1-bd57-8e4c9c2a0314
+		summarizeBy: none
+		sourceColumn: customer_unique_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column recency_days
+		dataType: int64
+		formatString: 0
+		lineageTag: 0bcbedd4-6029-5b5d-990c-9e3508c6dac5
+		summarizeBy: none
+		sourceColumn: recency_days
+
+		annotation SummarizationSetBy = Automatic
+
+	column frequency
+		dataType: int64
+		formatString: 0
+		lineageTag: efdd88d7-0c92-57d6-a1fe-bbcb055706a3
+		summarizeBy: sum
+		sourceColumn: frequency
+
+		annotation SummarizationSetBy = Automatic
+
+	column monetary
+		dataType: decimal
+		formatString: #,0.00
+		lineageTag: f4f1ef3d-086a-5864-b52a-635a08744ad4
+		summarizeBy: sum
+		sourceColumn: monetary
+
+		annotation SummarizationSetBy = Automatic
+
+	column r_score
+		dataType: int64
+		formatString: 0
+		lineageTag: faeb5316-d91a-5708-b89a-f64c9776d932
+		summarizeBy: none
+		sourceColumn: r_score
+
+		annotation SummarizationSetBy = Automatic
+
+	column f_score
+		dataType: int64
+		formatString: 0
+		lineageTag: 0ef73d83-2026-5c0b-8e0f-17b328387ef5
+		summarizeBy: none
+		sourceColumn: f_score
+
+		annotation SummarizationSetBy = Automatic
+
+	column m_score
+		dataType: int64
+		formatString: 0
+		lineageTag: e17bb00d-67b5-5fe0-88bf-bb09992ec10e
+		summarizeBy: none
+		sourceColumn: m_score
+
+		annotation SummarizationSetBy = Automatic
+
+	column rfm_segment
+		dataType: string
+		lineageTag: 689d051e-a6c6-5e2d-a01d-e2ae9339e0f7
+		summarizeBy: none
+		sourceColumn: rfm_segment
+
+		annotation SummarizationSetBy = Automatic
+
+	column cluster
+		dataType: int64
+		formatString: 0
+		lineageTag: b63f1447-80bf-5857-b031-72b2d09cc40f
+		summarizeBy: none
+		sourceColumn: cluster
+
+		annotation SummarizationSetBy = Automatic
+
+	column cluster_name
+		dataType: string
+		lineageTag: 2ba484dc-a702-5b97-9c1f-d65f521ddedf
+		summarizeBy: none
+		sourceColumn: cluster_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column recommended_strategy
+		dataType: string
+		lineageTag: 2bf47dc5-2915-5ae3-b07f-94d3b736041e
+		summarizeBy: none
+		sourceColumn: recommended_strategy
+
+		annotation SummarizationSetBy = Automatic
+
+	column scored_at
+		dataType: string
+		lineageTag: ae685335-2fd0-5659-9a4a-a267c5aa9bec
+		summarizeBy: none
+		sourceColumn: scored_at
+
+		annotation SummarizationSetBy = Automatic
+
+	partition CustomerSegments = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents(DataFolder & "\customer_segments.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    Promoted = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
+				    Selected = Table.SelectColumns(Promoted, {"customer_unique_id", "recency_days", "frequency", "monetary", "r_score", "f_score", "m_score", "rfm_segment", "cluster", "cluster_name", "recommended_strategy", "scored_at"}),
+				    Typed = Table.TransformColumnTypes(Selected, {{"customer_unique_id", type text}, {"recency_days", Int64.Type}, {"frequency", Int64.Type}, {"monetary", Currency.Type}, {"r_score", Int64.Type}, {"f_score", Int64.Type}, {"m_score", Int64.Type}, {"rfm_segment", type text}, {"cluster", Int64.Type}, {"cluster_name", type text}, {"recommended_strategy", type text}, {"scored_at", type text}}, "en-US")
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table

@@ -1,0 +1,496 @@
+/// Home table for all business measures (no data).
+table _Measures
+	lineageTag: fe0ca8aa-4666-594a-b092-fc32cbc14eaf
+
+	/// Item price + freight of orders not canceled/unavailable (BRL).
+	measure 'Total Revenue' = SUM ( FactOrders[revenue] )
+		formatString: R$ #,0
+		displayFolder: 1 Revenue
+		lineageTag: 253a12aa-b86c-5877-85c5-84f3c704c6be
+
+	/// Item price only, revenue orders.
+	measure 'Product Revenue' = CALCULATE ( SUM ( FactOrders[items_price] ), FactOrders[is_revenue_order] = TRUE () )
+		formatString: R$ #,0
+		displayFolder: 1 Revenue
+		lineageTag: 59d53962-7dd0-5f12-84c4-8e949164ccb3
+
+	/// Freight charged, revenue orders.
+	measure 'Freight Revenue' = CALCULATE ( SUM ( FactOrders[freight_value] ), FactOrders[is_revenue_order] = TRUE () )
+		formatString: R$ #,0
+		displayFolder: 1 Revenue
+		lineageTag: c66ec164-bc80-511b-b3ee-b17e799dde4d
+
+	/// Item-grain revenue for product/seller analysis (no fan-out).
+	measure 'Item Revenue' = CALCULATE ( SUM ( FactOrderItems[price] ), FactOrderItems[is_revenue_order] = TRUE () )
+		formatString: R$ #,0
+		displayFolder: 1 Revenue
+		lineageTag: a97ecb44-67da-5ce5-be97-7fd2bf60c318
+
+	/// Sum of payment transactions.
+	measure 'Total Payment Value' = SUM ( FactPayments[payment_value] )
+		formatString: R$ #,0
+		displayFolder: 1 Revenue
+		lineageTag: 50bbfd73-35d0-53de-b004-81cd13ce87ed
+
+	/// Revenue in the same period of the previous year.
+	measure 'Revenue PY' = CALCULATE ( [Total Revenue], SAMEPERIODLASTYEAR ( DimDate[full_date] ) )
+		formatString: R$ #,0
+		displayFolder: 2 Time Intelligence
+		lineageTag: 4f15076e-78c9-5e18-93a1-2b6ad03db259
+
+	/// Year-over-year revenue growth.
+	measure 'Revenue YoY %' = DIVIDE ( [Total Revenue] - [Revenue PY], [Revenue PY] )
+		formatString: 0.0%
+		displayFolder: 2 Time Intelligence
+		lineageTag: bdcf45e2-cdca-5795-b960-82b67cce5c88
+
+	/// Revenue in the previous month.
+	measure 'Revenue PM' = CALCULATE ( [Total Revenue], DATEADD ( DimDate[full_date], -1, MONTH ) )
+		formatString: R$ #,0
+		displayFolder: 2 Time Intelligence
+		lineageTag: 5a69b548-0a8c-5ec3-857b-a7c218e42cf3
+
+	/// Month-over-month growth.
+	measure 'Revenue MoM %' = DIVIDE ( [Total Revenue] - [Revenue PM], [Revenue PM] )
+		formatString: 0.0%
+		displayFolder: 2 Time Intelligence
+		lineageTag: 2d728493-2c86-5e41-8103-fc856dc8e658
+
+	/// Year-to-date revenue.
+	measure 'Revenue YTD' = TOTALYTD ( [Total Revenue], DimDate[full_date] )
+		formatString: R$ #,0
+		displayFolder: 2 Time Intelligence
+		lineageTag: 00a4760c-63cb-51af-b444-081cdf97b818
+
+	/// Quarter-to-date revenue.
+	measure 'Revenue QTD' = TOTALQTD ( [Total Revenue], DimDate[full_date] )
+		formatString: R$ #,0
+		displayFolder: 2 Time Intelligence
+		lineageTag: 236a320c-7adf-5758-beed-9d02a9d55b73
+
+	/// Revenue in the 30 days ending at the latest date in context.
+	measure 'Revenue Rolling 30D' = CALCULATE ( [Total Revenue], DATESINPERIOD ( DimDate[full_date], MAX ( DimDate[full_date] ), -30, DAY ) )
+		formatString: R$ #,0
+		displayFolder: 2 Time Intelligence
+		lineageTag: d31198c0-9b02-55ec-8914-8eeebae00776
+
+	/// Cumulative revenue (CALCULATE + FILTER + ALL).
+	measure 'Revenue Running Total' = CALCULATE ( [Total Revenue], FILTER ( ALL ( DimDate[full_date] ), DimDate[full_date] <= MAX ( DimDate[full_date] ) ) )
+		formatString: R$ #,0
+		displayFolder: 2 Time Intelligence
+		lineageTag: ea515f85-ed7e-59e9-85f0-9f9f24b90842
+
+	/// Average revenue per calendar day in context (AVERAGEX).
+	measure 'Avg Daily Revenue' = AVERAGEX ( VALUES ( DimDate[full_date] ), [Total Revenue] )
+		formatString: R$ #,0
+		displayFolder: 1 Revenue
+		lineageTag: c55fec3d-bd5e-55e6-891c-7649eaf94795
+
+	/// Revenue-recognised orders.
+	measure 'Total Orders' = CALCULATE ( COUNTROWS ( FactOrders ), FactOrders[is_revenue_order] = TRUE () )
+		formatString: #,0
+		displayFolder: 3 Orders
+		lineageTag: cada4807-01a1-5565-8166-57add1de59a3
+
+	/// All orders, any status.
+	measure 'All Orders' = COUNTROWS ( FactOrders )
+		formatString: #,0
+		displayFolder: 3 Orders
+		lineageTag: 9460eced-d36e-53e3-bd36-cbfcf2b1b247
+
+	/// Revenue / orders.
+	measure 'Average Order Value' = DIVIDE ( [Total Revenue], [Total Orders] )
+		formatString: R$ #,0.00
+		displayFolder: 3 Orders
+		lineageTag: b076ed45-5617-54d0-acad-957b0c958e49
+
+	/// Order lines of revenue orders.
+	measure 'Items Sold' = CALCULATE ( COUNTROWS ( FactOrderItems ), FactOrderItems[is_revenue_order] = TRUE () )
+		formatString: #,0
+		displayFolder: 3 Orders
+		lineageTag: 78272df7-1848-5730-9fed-bf7a68ef6bed
+
+	/// Average basket size.
+	measure 'Items per Order' = DIVIDE ( [Items Sold], [Total Orders] )
+		formatString: 0.00
+		displayFolder: 3 Orders
+		lineageTag: 20e1f64a-edd1-5d8d-992e-44c2bbe2155e
+
+	/// Distinct real customers with a revenue order. FILTER over the fact TABLE (expanded table) restricts DimCustomer; a plain column predicate on FactOrders would not.
+	measure 'Unique Customers' = CALCULATE ( DISTINCTCOUNT ( DimCustomer[customer_unique_id] ), FILTER ( FactOrders, FactOrders[is_revenue_order] = TRUE () ) )
+		formatString: #,0
+		displayFolder: 4 Customers
+		lineageTag: 30f970a1-b334-5b64-a934-aac654a8d7f4
+
+	/// Customers with more than one revenue order (FILTER over customers).
+	measure 'Repeat Customers' = COUNTROWS ( FILTER ( VALUES ( DimCustomer[customer_unique_id] ), CALCULATE ( COUNTROWS ( FactOrders ), FactOrders[is_revenue_order] = TRUE (), FactOrders[items_count] > 0 ) > 1 ) )
+		formatString: #,0
+		displayFolder: 4 Customers
+		lineageTag: d6c625ef-3b0b-5c5c-b518-48f543a58403
+
+	/// Share of customers who ordered more than once.
+	measure 'Repeat Customer Rate' = DIVIDE ( [Repeat Customers], [Unique Customers] )
+		formatString: 0.00%
+		displayFolder: 4 Customers
+		lineageTag: b0c3bafe-d58f-5adc-bbe8-c76d02cfc148
+
+	/// Average customer value.
+	measure 'Revenue per Customer' = DIVIDE ( [Total Revenue], [Unique Customers] )
+		formatString: R$ #,0.00
+		displayFolder: 4 Customers
+		lineageTag: 1e28b6ad-df91-55c9-adcb-9b46e7a7b12d
+
+	/// Historical CLV estimate = AOV x orders per customer.
+	measure 'Estimated CLV' = [Average Order Value] * DIVIDE ( [Total Orders], [Unique Customers] )
+		formatString: R$ #,0.00
+		displayFolder: 4 Customers
+		lineageTag: e3c0f8a4-e672-59b6-a188-11930542ddd3
+
+	/// Rank of the state by revenue (RANKX over ALL states).
+	measure 'Customer Revenue Rank' = IF ( HASONEVALUE ( DimCustomer[state] ), RANKX ( ALL ( DimCustomer[state] ), [Total Revenue], , DESC, DENSE ) )
+		formatString: #,0
+		displayFolder: 4 Customers
+		lineageTag: 39ec384e-0227-581f-bdbe-18b88a6685d8
+
+	/// Share of total revenue (ALL removes customer filters).
+	measure 'Share of Revenue' = DIVIDE ( [Total Revenue], CALCULATE ( [Total Revenue], ALL ( DimCustomer ) ) )
+		formatString: 0.0%
+		displayFolder: 4 Customers
+		lineageTag: c58221d5-11f8-58e5-9136-2280cb57b162
+
+	/// Share within the customer's region (ALLEXCEPT keeps region filter).
+	measure 'Share of Region Revenue' = DIVIDE ( [Total Revenue], CALCULATE ( [Total Revenue], ALLEXCEPT ( DimCustomer, DimCustomer[region] ) ) )
+		formatString: 0.0%
+		displayFolder: 4 Customers
+		lineageTag: 515314d5-ee25-5623-b011-17240334827d
+
+	/// Customers buying in the period (cohort matrix value).
+	measure 'Active Customers' = CALCULATE ( DISTINCTCOUNT ( DimCustomer[customer_unique_id] ), FILTER ( FactOrders, FactOrders[is_revenue_order] = TRUE () ) )
+		formatString: #,0
+		displayFolder: 4 Customers
+		lineageTag: e6cc5fab-a64e-5a51-88ea-54fcfca266e9
+
+	/// Orders delivered to the customer.
+	measure 'Delivered Orders' = CALCULATE ( COUNTROWS ( FactOrders ), FactOrders[is_delivered] = TRUE () )
+		formatString: #,0
+		displayFolder: 5 Operations
+		lineageTag: 8dfb5150-8331-5ea5-8ea3-085b97adc648
+
+	/// Delivered after the estimated date.
+	measure 'Late Orders' = CALCULATE ( COUNTROWS ( FactOrders ), FactOrders[is_late] = TRUE () )
+		formatString: #,0
+		displayFolder: 5 Operations
+		lineageTag: 197a7bea-ba34-50a1-9d90-156bd5672c71
+
+	/// Delivered on or before the estimate / delivered orders.
+	measure 'On-Time Delivery %' = DIVIDE ( CALCULATE ( COUNTROWS ( FactOrders ), FactOrders[is_on_time] = TRUE () ), [Delivered Orders] )
+		formatString: 0.0%
+		displayFolder: 5 Operations
+		lineageTag: 4dfbd5f4-5831-5b90-bb94-ad08d1ecc870
+
+	/// Late / delivered orders.
+	measure 'Late Delivery %' = DIVIDE ( [Late Orders], [Delivered Orders] )
+		formatString: 0.0%
+		displayFolder: 5 Operations
+		lineageTag: 2c1c10c9-dd5c-5a2e-b7fd-ff3df63c7191
+
+	/// Purchase to delivery, days.
+	measure 'Avg Delivery Days' = CALCULATE ( AVERAGE ( FactOrders[delivery_days] ), FactOrders[is_delivered] = TRUE () )
+		formatString: 0.0
+		displayFolder: 5 Operations
+		lineageTag: eba45818-1361-5490-9c34-15babc94cc9d
+
+	/// Average days late for late orders (AVERAGEX over FILTER).
+	measure 'Avg Delay of Late Orders' = AVERAGEX ( FILTER ( FactOrders, FactOrders[is_late] = TRUE () ), FactOrders[delivery_delay_days] )
+		formatString: 0.0
+		displayFolder: 5 Operations
+		lineageTag: 97c26ffb-3715-5dbb-b840-653ae5d35acc
+
+	/// Delivered orders counted on the delivery date (inactive relationship).
+	measure 'Deliveries by Delivery Date' = CALCULATE ( [Delivered Orders], USERELATIONSHIP ( FactOrders[delivered_date_key], DimDate[date_key] ) )
+		formatString: #,0
+		displayFolder: 5 Operations
+		lineageTag: 8f82cc07-398f-5c59-b161-f22672c94b63
+
+	/// Orders with status canceled.
+	measure 'Canceled Orders' = CALCULATE ( COUNTROWS ( FactOrders ), FactOrders[is_canceled] = TRUE () )
+		formatString: #,0
+		displayFolder: 5 Operations
+		lineageTag: 76352da7-3281-53b5-879d-b5b16c73cf0e
+
+	/// Canceled / all orders.
+	measure 'Cancellation Rate' = DIVIDE ( [Canceled Orders], [All Orders] )
+		formatString: 0.00%
+		displayFolder: 5 Operations
+		lineageTag: 65af13c5-b3da-5967-bb62-73489ea61ff2
+
+	/// Freight as share of item price (SUMX).
+	measure 'Freight Ratio' = DIVIDE ( SUMX ( FactOrderItems, FactOrderItems[freight_value] ), SUMX ( FactOrderItems, FactOrderItems[price] ) )
+		formatString: 0.0%
+		displayFolder: 5 Operations
+		lineageTag: c8409db3-443a-59b6-b586-38e3c1e2d714
+
+	/// Latest review per order (1-5).
+	measure 'Avg Review Score' = AVERAGE ( FactOrders[review_score] )
+		formatString: 0.00
+		displayFolder: 6 Reviews
+		lineageTag: 0d672e5f-7d17-5fca-85ec-3dde5010f580
+
+	/// Review responses.
+	measure 'Review Count' = COUNTROWS ( FactReviews )
+		formatString: #,0
+		displayFolder: 6 Reviews
+		lineageTag: 85a9cc99-5619-5e25-9bd5-9402ed147012
+
+	/// Share of 1-star reviews.
+	measure '1-Star Share' = DIVIDE ( CALCULATE ( COUNTROWS ( FactReviews ), FactReviews[review_score] = 1 ), [Review Count] )
+		formatString: 0.0%
+		displayFolder: 6 Reviews
+		lineageTag: d565d593-63ee-5572-a138-40133f5c41a6
+
+	/// Seller rank by item revenue.
+	measure 'Seller Revenue Rank' = IF ( HASONEVALUE ( DimSeller[seller_id] ), RANKX ( ALL ( DimSeller[seller_id] ), [Item Revenue], , DESC, DENSE ) )
+		formatString: #,0
+		displayFolder: 7 Sellers
+		lineageTag: 57512de4-1166-56ee-a712-174097be65c7
+
+	/// Orders containing the seller's items.
+	measure 'Seller Orders' = CALCULATE ( DISTINCTCOUNT ( FactOrderItems[order_id] ), FactOrderItems[is_revenue_order] = TRUE () )
+		formatString: #,0
+		displayFolder: 7 Sellers
+		lineageTag: 8403438a-ac71-5256-a523-482f4a3ec0c3
+
+	/// Review score of the orders containing the seller's items (TREATAS bridges items -> orders).
+	measure 'Seller Avg Review' = CALCULATE ( [Avg Review Score], TREATAS ( VALUES ( FactOrderItems[order_id] ), FactOrders[order_id] ) )
+		formatString: 0.00
+		displayFolder: 7 Sellers
+		lineageTag: 16614710-136a-531e-baba-2aaa6f63c7b5
+
+	/// On-time rate of the seller's orders.
+	measure 'Seller On-Time %' = CALCULATE ( [On-Time Delivery %], TREATAS ( VALUES ( FactOrderItems[order_id] ), FactOrders[order_id] ) )
+		formatString: 0.0%
+		displayFolder: 7 Sellers
+		lineageTag: 49c7fb97-fb4f-5958-bcc2-1e1ec39bd499
+
+	/// Sellers with sales in context.
+	measure 'Active Sellers' = CALCULATE ( DISTINCTCOUNT ( FactOrderItems[seller_key] ), FactOrderItems[is_revenue_order] = TRUE () )
+		formatString: #,0
+		displayFolder: 7 Sellers
+		lineageTag: 1aac47c3-61d8-5207-a7d4-18c8a7e028bd
+
+	/// Predicted daily revenue (selected model).
+	measure 'Forecast Revenue' = SUM ( RevenueForecast[predicted] )
+		formatString: R$ #,0
+		displayFolder: 8 Predictive
+		lineageTag: 3aca9718-1be6-5270-a49a-b044fa6b4437
+
+	/// Lower 95% bound.
+	measure 'Forecast Lower 95' = SUM ( RevenueForecast[lower_95] )
+		formatString: R$ #,0
+		displayFolder: 8 Predictive
+		lineageTag: 3b505bb1-7109-5a07-a951-1f9312f12ae0
+
+	/// Upper 95% bound.
+	measure 'Forecast Upper 95' = SUM ( RevenueForecast[upper_95] )
+		formatString: R$ #,0
+		displayFolder: 8 Predictive
+		lineageTag: 1dc08a3b-0a46-565b-8a39-c540d92b3f7f
+
+	/// Actual revenue in backtest windows.
+	measure 'Backtest Actual' = SUM ( RevenueForecast[actual] )
+		formatString: R$ #,0
+		displayFolder: 8 Predictive
+		lineageTag: f6622a2a-f3f1-5f5c-949c-6699322a2584
+
+	/// Sum of absolute backtest errors.
+	measure 'Forecast Abs Error' = SUMX ( FILTER ( RevenueForecast, NOT ISBLANK ( RevenueForecast[actual] ) ), ABS ( RevenueForecast[predicted] - RevenueForecast[actual] ) )
+		formatString: R$ #,0
+		displayFolder: 8 Predictive
+		lineageTag: 49553d47-3032-577c-8339-23e014864cf5
+
+	/// Mean absolute % error on backtest rows.
+	measure 'Forecast MAPE' = AVERAGEX ( FILTER ( RevenueForecast, RevenueForecast[actual] > 0 ), ABS ( RevenueForecast[predicted] - RevenueForecast[actual] ) / RevenueForecast[actual] )
+		formatString: 0.0%
+		displayFolder: 8 Predictive
+		lineageTag: 19f4e982-2dfd-581d-9fd5-93f70f4e1c67
+
+	/// Predicted weekly units.
+	measure 'Demand Forecast Units' = SUM ( DemandForecast[predicted] )
+		formatString: #,0.0
+		displayFolder: 8 Predictive
+		lineageTag: 1ae150d1-a1dc-5ec6-bf10-4a3c730af9eb
+
+	/// Actual weekly units (backtest).
+	measure 'Demand Actual Units' = SUM ( DemandForecast[actual] )
+		formatString: #,0
+		displayFolder: 8 Predictive
+		lineageTag: c7ba752b-40cd-59cd-b0ec-737877fefcb2
+
+	/// Mean P(no purchase in 180 d).
+	measure 'Avg Churn Probability' = AVERAGE ( ChurnScores[churn_probability] )
+		formatString: 0.0%
+		displayFolder: 8 Predictive
+		lineageTag: dc0d0a85-b9bf-5ec8-9149-2ebc5d06d3cb
+
+	/// Customers in High / Very High churn bands.
+	measure 'High Risk Customers' = CALCULATE ( COUNTROWS ( ChurnScores ), ChurnScores[risk_band] IN { "High", "Very High" } )
+		formatString: #,0
+		displayFolder: 8 Predictive
+		lineageTag: b020cda9-7062-5249-a483-2b7c9dbb9557
+
+	/// Customers in segment.
+	measure 'Segment Customers' = COUNTROWS ( CustomerSegments )
+		formatString: #,0
+		displayFolder: 8 Predictive
+		lineageTag: 12df56da-a2e0-5727-a737-2e30a93361d7
+
+	/// Customers with a churn score.
+	measure 'Scored Customers' = COUNTROWS ( ChurnScores )
+		formatString: #,0
+		displayFolder: 8 Predictive
+		lineageTag: e989fd08-027f-5cdb-bbb6-cca12285a075
+
+	/// Revenue on anomaly days (blank otherwise, so tables list only anomalies).
+	measure 'Anomaly Revenue' = CALCULATE ( SUM ( Anomalies[revenue] ), Anomalies[is_anomaly] = TRUE () )
+		formatString: R$ #,0
+		displayFolder: 8 Predictive
+		lineageTag: 18802ad8-4d18-59a8-ae8d-739b94797376
+
+	/// Days flagged by >= 2 detectors.
+	measure 'Anomaly Days' = CALCULATE ( COUNTROWS ( Anomalies ), Anomalies[is_anomaly] = TRUE () )
+		formatString: #,0
+		displayFolder: 8 Predictive
+		lineageTag: 65080491-1c99-51dd-964a-d46a2f9bbd3b
+
+	/// Dynamic measure driven by the KPI Selector slicer (SWITCH).
+	measure 'Selected KPI Value' =
+			SWITCH ( SELECTEDVALUE ( 'KPI Selector'[KPI], "Revenue" ),
+			    "Revenue", [Total Revenue],
+			    "Orders", [Total Orders],
+			    "Customers", [Unique Customers],
+			    "Average Order Value", [Average Order Value],
+			    "On-Time Delivery %", [On-Time Delivery %],
+			    "Avg Review Score", [Avg Review Score]
+			)
+		formatString: #,0.00
+		displayFolder: 9 Dynamic
+		lineageTag: 0defa9c4-8975-5541-856e-95a82d4cf5b9
+
+	/// Dynamic chart title.
+	measure 'Selected KPI Title' = "Trend: " & SELECTEDVALUE ( 'KPI Selector'[KPI], "Revenue" )
+		displayFolder: 9 Dynamic
+		lineageTag: c6b34aed-3c7b-50a7-ba63-cb79714b2401
+
+	/// Conditional-formatting colour for on-time %.
+	measure 'Color On-Time' = IF ( [On-Time Delivery %] >= 0.9, "#16A34A", IF ( [On-Time Delivery %] >= 0.85, "#D97706", "#DC2626" ) )
+		displayFolder: 9 Dynamic
+		lineageTag: 8e293947-bafa-5019-af4a-9453511348f5
+
+	/// Conditional-formatting colour for growth.
+	measure 'Color Growth' = IF ( ISBLANK ( [Revenue YoY %] ), "#94A3B8", IF ( [Revenue YoY %] >= 0, "#16A34A", "#DC2626" ) )
+		displayFolder: 9 Dynamic
+		lineageTag: aed70c9f-3d1b-5aad-9dc9-aa0b002c1352
+
+	/// Gauge minimum.
+	measure 'Gauge Min' = 0
+		formatString: 0
+		displayFolder: 9 Dynamic
+		lineageTag: 76fb0206-60a1-51a0-988a-516c6e2a31db
+
+	/// Gauge maximum for percentages.
+	measure 'Gauge Max %' = 1
+		formatString: 0.0%
+		displayFolder: 9 Dynamic
+		lineageTag: 5a08c309-f33f-5439-8127-0a43f626c688
+
+	/// On-time delivery target (management threshold).
+	measure 'Target On-Time %' = 0.9
+		formatString: 0.0%
+		displayFolder: 9 Dynamic
+		lineageTag: 00ffff00-cb4a-54d6-9be1-b620cb08e5ed
+
+	/// Gauge maximum for review score.
+	measure 'Gauge Max Review' = 5
+		formatString: 0.00
+		displayFolder: 9 Dynamic
+		lineageTag: d13cb010-4d1d-5fe8-9581-fccb14b01382
+
+	/// Review score target.
+	measure 'Target Review' = 4
+		formatString: 0.00
+		displayFolder: 9 Dynamic
+		lineageTag: bc98e48d-3202-5042-a51b-7550093d1779
+
+	/// Heat colour: share of the top state's revenue.
+	measure 'Color State Revenue' =
+			VAR s = DIVIDE ( [Total Revenue], MAXX ( ALLSELECTED ( DimCustomer[state] ), [Total Revenue] ) )
+			RETURN SWITCH ( TRUE (), s >= 0.5, "#1E3A8A", s >= 0.2, "#1D4ED8", s >= 0.08, "#3B82F6", s >= 0.03, "#60A5FA", "#93C5FD" )
+		displayFolder: 9 Dynamic
+		lineageTag: 269feec5-d3e8-584e-a3c8-07d0dc474b3f
+
+	/// Traffic-light colour for late-delivery rate.
+	measure 'Color State Late' = SWITCH ( TRUE (), [Late Delivery %] >= 0.15, "#DC2626", [Late Delivery %] >= 0.10, "#F97316", [Late Delivery %] >= 0.07, "#EAB308", "#16A34A" )
+		displayFolder: 9 Dynamic
+		lineageTag: 631a8560-88ba-550b-879d-9fe26479e64f
+
+	/// Red → green by review score.
+	measure 'Color Review Score' = SWITCH ( SELECTEDVALUE ( FactReviews[review_score] ), 1, "#DC2626", 2, "#F97316", 3, "#EAB308", 4, "#84CC16", 5, "#16A34A", "#94A3B8" )
+		displayFolder: 9 Dynamic
+		lineageTag: 8ae22fa6-e045-503b-9d87-f4e6853ed07e
+
+	/// Colour by churn risk band.
+	measure 'Color Risk Band' = SWITCH ( SELECTEDVALUE ( ChurnScores[risk_band] ), "Very High", "#DC2626", "High", "#F97316", "Medium", "#EAB308", "#94A3B8" )
+		displayFolder: 9 Dynamic
+		lineageTag: 8b7dfc15-06b2-5d7d-a2f7-2a578f8c71c9
+
+	/// Fixed colour per RFM segment.
+	measure 'Color RFM Segment' = SWITCH ( SELECTEDVALUE ( CustomerSegments[rfm_segment] ), "Champions", "#16A34A", "Loyal - Lapsing", "#0D9488", "New High-Value", "#4F46E5", "New Low-Value", "#0284C7", "Needs Attention", "#D97706", "At Risk - High Value", "#DB2777", "Hibernating", "#64748B", "#94A3B8" )
+		displayFolder: 9 Dynamic
+		lineageTag: 268184df-9554-5197-89b4-f2240cbea418
+
+	/// Heat-map colour for the cohort matrix.
+	measure 'Color Cohort Heat' = SWITCH ( TRUE (), [Active Customers] >= 3000, "#0F766E", [Active Customers] >= 1000, "#14B8A6", [Active Customers] >= 100, "#5EEAD4", [Active Customers] >= 10, "#99F6E4", [Active Customers] >= 1, "#CCFBF1", BLANK () )
+		displayFolder: 9 Dynamic
+		lineageTag: b2fd901b-f2bd-5eee-bf6e-1d628a3c4df4
+
+	/// Traffic-light colour for seller on-time rate.
+	measure 'Color Seller On-Time' = IF ( [Seller On-Time %] >= 0.9, "#16A34A", IF ( [Seller On-Time %] >= 0.85, "#D97706", "#DC2626" ) )
+		displayFolder: 9 Dynamic
+		lineageTag: b24a912d-4a19-541c-a605-dce5cdcea3cc
+
+	/// Alert red.
+	measure 'Color Alert' = "#DC2626"
+		displayFolder: 9 Dynamic
+		lineageTag: 01cb02bf-71b5-507c-8e76-348c108d9aa8
+
+	/// Report footer text.
+	measure 'Data Freshness' = "Data through " & FORMAT ( CALCULATE ( MAX ( FactOrders[purchase_timestamp] ), ALL ( FactOrders ) ), "yyyy-mm-dd" )
+		displayFolder: 9 Dynamic
+		lineageTag: 7a931ef2-fb07-5e4d-9e3a-259cbd6bd8e6
+
+	/// SIMULATED – synthetic unit costs; not a real finding.
+	measure 'SIMULATED Gross Margin %' = DIVIDE ( SUM ( SynCategoryMargin[simulated_gross_margin] ), SUM ( SynCategoryMargin[revenue] ) )
+		formatString: 0.0%
+		displayFolder: Z Simulated (not real data)
+		lineageTag: a4f53cba-90f4-5e70-a146-95ffd1dabcbf
+
+	/// SIMULATED – synthetic inventory model.
+	measure 'SIMULATED Stockout Weeks' = CALCULATE ( COUNTROWS ( SynInventoryWeekly ), SynInventoryWeekly[is_stockout] = TRUE () )
+		formatString: #,0
+		displayFolder: Z Simulated (not real data)
+		lineageTag: 42b363ad-8f15-5f0b-98ae-1db5e165f79b
+
+	column Placeholder
+		dataType: string
+		isHidden
+		lineageTag: fe37a952-3471-5608-afbb-88a96efc6998
+		summarizeBy: none
+		sourceColumn: [Placeholder]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition _Measures = calculated
+		mode: import
+		source = ROW ( "Placeholder", "" )
+
+	annotation PBI_ResultType = Table

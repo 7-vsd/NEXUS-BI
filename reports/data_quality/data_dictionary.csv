@@ -1,0 +1,53 @@
+dataset,column,target_type,is_primary_key,foreign_key_to,null_pct,distinct_values,example,description
+category_translation,product_category_name,string,True,,0.0,71,beleza_saude,Product category (Portuguese).
+category_translation,product_category_name_english,string,False,,0.0,71,health_beauty,Category name translated to English.
+customers,customer_id,string,True,,0.0,99441,06b8999e2fba1a1fbc88172c00ba8bc7,Order-scoped customer key (one per order). FK from orders.
+customers,customer_unique_id,string,False,,0.0,96096,861eff4711a542e4b93843c6dd7febb0,Stable identifier of the real customer across orders.
+customers,customer_zip_code_prefix,string,False,,0.0,14994,14409,"First 5 digits of the customer zip code (string, zero-padded)."
+customers,customer_city,string,False,,0.0,4119,franca,"Customer city name (lower-case, Portuguese)."
+customers,customer_state,string,False,,0.0,27,SP,Customer state (2-letter Brazilian UF code).
+geolocation,geolocation_zip_code_prefix,string,False,,0.0,19015,01037,5-digit zip-code prefix.
+geolocation,geolocation_lat,float,False,,0.0,717360,-23.54562128115268,Latitude (decimal degrees).
+geolocation,geolocation_lng,float,False,,0.0,717613,-46.63929204800168,Longitude (decimal degrees).
+geolocation,geolocation_city,string,False,,0.0,8010,sao paulo,City name.
+geolocation,geolocation_state,string,False,,0.0,27,SP,State (UF).
+order_items,order_id,string,True,orders.order_id,0.0,98666,00010242fe8c5a6d1ba2dd792cb16214,Unique order identifier.
+order_items,order_item_id,int,True,,0.0,21,1,Sequential item number within an order (1..n).
+order_items,product_id,string,False,products.product_id,0.0,32951,4244733e06e7ecb4970a6e2683c13e61,Unique product identifier.
+order_items,seller_id,string,False,sellers.seller_id,0.0,3095,48436dade18ac8b2bce089ec2a041202,Unique seller identifier.
+order_items,shipping_limit_date,datetime,False,,0.0,93318,2017-09-19 09:45:35,Seller's shipping deadline for handing the item to the carrier.
+order_items,price,float,False,,0.0,5968,58.9,Item price in BRL.
+order_items,freight_value,float,False,,0.0,6999,13.29,Freight charged for the item in BRL (split per item when the order has several).
+orders,order_id,string,True,,0.0,99441,e481f51cbdc54678b7cc49136f2d6af7,Unique order identifier.
+orders,customer_id,string,False,customers.customer_id,0.0,99441,9ef432eb6251297304e76186b10a928d,Order-scoped customer key (one per order). FK from orders.
+orders,order_status,string,False,,0.0,8,delivered,"Lifecycle status: delivered, shipped, canceled, unavailable, invoiced, processing, created, approved."
+orders,order_purchase_timestamp,datetime,False,,0.0,98875,2017-10-02 10:56:33,Timestamp the order was placed.
+orders,order_approved_at,datetime,False,,0.161,90733,2017-10-02 11:07:15,Timestamp payment was approved.
+orders,order_delivered_carrier_date,datetime,False,,1.793,81018,2017-10-04 19:55:00,Timestamp the order was handed to the logistics partner.
+orders,order_delivered_customer_date,datetime,False,,2.982,95664,2017-10-10 21:25:13,Actual delivery timestamp to the customer.
+orders,order_estimated_delivery_date,datetime,False,,0.0,459,2017-10-18 00:00:00,Estimated delivery date shown to the customer at purchase.
+payments,order_id,string,True,orders.order_id,0.0,99440,b81ef226f3fe1789b1e8b2acac839d17,Unique order identifier.
+payments,payment_sequential,int,True,,0.0,29,1,Sequence number when an order is paid with several payment methods.
+payments,payment_type,string,False,,0.0,5,credit_card,"credit_card, boleto, voucher, debit_card, not_defined."
+payments,payment_installments,int,False,,0.0,24,8,Number of installments chosen by the customer.
+payments,payment_value,float,False,,0.0,29077,99.33,Transaction value in BRL.
+products,product_id,string,True,,0.0,32951,1e9e8ef04dbcff4541ed26657ea517e5,Unique product identifier.
+products,product_category_name,string,False,,1.851,73,perfumaria,Product category (Portuguese).
+products,product_name_lenght,float,False,,1.851,66,40.0,Characters in the product name (source spelling 'lenght').
+products,product_description_lenght,float,False,,1.851,2960,287.0,Characters in the product description (source spelling 'lenght').
+products,product_photos_qty,float,False,,1.851,19,1.0,Number of published product photos.
+products,product_weight_g,float,False,,0.006,2204,225.0,Product weight in grams.
+products,product_length_cm,float,False,,0.006,99,16.0,Product length in cm.
+products,product_height_cm,float,False,,0.006,102,10.0,Product height in cm.
+products,product_width_cm,float,False,,0.006,95,14.0,Product width in cm.
+reviews,review_id,string,True,,0.0,98410,7bc2406110b926393aa56f80a40eba40,Survey identifier (NOT unique alone: the same review_id can cover several orders).
+reviews,order_id,string,True,orders.order_id,0.0,98673,73fc7af87114b39712e6da79b0a377eb,Unique order identifier.
+reviews,review_score,int,False,,0.0,5,4,Satisfaction score 1-5.
+reviews,review_comment_title,string,False,,88.342,4179,recomendo,Optional review title (Portuguese).
+reviews,review_comment_message,string,False,,58.703,35617,Recebi bem antes do prazo estipulado.,Optional review comment (Portuguese).
+reviews,review_creation_date,datetime,False,,0.0,636,2018-01-18 00:00:00,Date the satisfaction survey was sent.
+reviews,review_answer_timestamp,datetime,False,,0.0,98248,2018-01-18 21:46:59,Timestamp the survey was answered.
+sellers,seller_id,string,True,,0.0,3095,3442f8959a84dea7ee197c632cb2df15,Unique seller identifier.
+sellers,seller_zip_code_prefix,string,False,,0.0,2246,13023,First 5 digits of the seller zip code.
+sellers,seller_city,string,False,,0.0,611,campinas,Seller city name.
+sellers,seller_state,string,False,,0.0,23,SP,Seller state (UF).

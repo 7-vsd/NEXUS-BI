@@ -1,0 +1,68 @@
+/// SIMULATED category margin – synthetic costs, not real data.
+table SynCategoryMargin
+	lineageTag: f266cfa6-d0d1-522f-9831-15526aba1aa1
+
+	column category_name_en
+		dataType: string
+		lineageTag: 996360f1-4cfd-5530-b429-35d65db01a55
+		summarizeBy: none
+		sourceColumn: category_name_en
+
+		annotation SummarizationSetBy = Automatic
+
+	column revenue
+		dataType: decimal
+		formatString: #,0.00
+		lineageTag: ad613156-0aba-5dc7-b4e8-03cf0f59c31f
+		summarizeBy: sum
+		sourceColumn: revenue
+
+		annotation SummarizationSetBy = Automatic
+
+	column simulated_cogs
+		dataType: decimal
+		formatString: #,0.00
+		lineageTag: 36622733-6bef-5043-9841-d8e913042164
+		summarizeBy: sum
+		sourceColumn: simulated_cogs
+
+		annotation SummarizationSetBy = Automatic
+
+	column simulated_gross_margin
+		dataType: decimal
+		formatString: #,0.00
+		lineageTag: 4c71fd3e-c1c7-5f58-8765-3026aeec6e08
+		summarizeBy: sum
+		sourceColumn: simulated_gross_margin
+
+		annotation SummarizationSetBy = Automatic
+
+	column simulated_margin_pct
+		dataType: decimal
+		formatString: #,0.00
+		lineageTag: 65d46db5-4a03-55ec-bf46-15822cc5f3b0
+		summarizeBy: sum
+		sourceColumn: simulated_margin_pct
+
+		annotation SummarizationSetBy = Automatic
+
+	column is_synthetic
+		dataType: boolean
+		lineageTag: 85c05df6-c1b9-58b6-bf03-60a318dbb7ec
+		summarizeBy: none
+		sourceColumn: is_synthetic
+
+		annotation SummarizationSetBy = Automatic
+
+	partition SynCategoryMargin = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents(DataFolder & "\vw_syn_category_margin.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    Promoted = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
+				    Selected = Table.SelectColumns(Promoted, {"category_name_en", "revenue", "simulated_cogs", "simulated_gross_margin", "simulated_margin_pct", "is_synthetic"}),
+				    Typed = Table.TransformColumnTypes(Selected, {{"category_name_en", type text}, {"revenue", Currency.Type}, {"simulated_cogs", Currency.Type}, {"simulated_gross_margin", Currency.Type}, {"simulated_margin_pct", Currency.Type}, {"is_synthetic", type logical}}, "en-US")
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table

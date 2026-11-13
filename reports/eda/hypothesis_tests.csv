@@ -1,0 +1,7 @@
+id,hypothesis,test,statistic,p_value,effect_size,decision,detail,p_value_fmt
+H1,Late orders receive lower review scores than on-time orders,Mann-Whitney U (one-sided),467430237.0,0.0,rank-biserial r = 0.638,Reject H0,mean on-time 4.29 vs late 2.27,< 1e-300
+H2,Review score distribution differs between regions,Kruskal-Wallis H,243.48137265907496,1.6507459915653806e-51,epsilon² = 0.0025,Reject H0,"Centro-Oeste 4.13, Nordeste 3.97, Norte 4.03, Sudeste 4.18, Sul 4.19",1.65e-51
+H3,Late delivery is independent of customer region,Chi-square independence,559.3006526020362,9.944248683738273e-120,Cramér's V = 0.076,Reject H0,dof=4,9.94e-120
+H4,Delivery time is monotonically associated with review score,Spearman correlation,-0.23457650910294428,0.0,rho = -0.235,Reject H0,,< 1e-300
+H5,Weekend and weekday orders have the same mean (log) order value,Welch t-test on log(order value),-1.1020279842908263,0.27045660472123,geo-mean ratio = 0.993,Fail to reject H0,median weekend 105.76 vs weekday 105.28,0.27
+H6,Credit-card and boleto orders have the same order-value distribution,Mann-Whitney U (two-sided),799912563.0,2.9351983260359126e-113,,Reject H0,median card 109.50 vs boleto 93.82,2.94e-113
